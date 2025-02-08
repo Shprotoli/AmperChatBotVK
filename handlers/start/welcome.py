@@ -6,17 +6,55 @@ from vkbottle import Keyboard, KeyboardButtonColor, Callback
 from AmperChatBot.handlers.ABC.ABCAmper import ACallbackHandler
 
 class CStartBot(ACallbackHandler):
-    async def realization_callback(self, information_callback, api_vk_class):
-        peer_id = information_callback['peer_id']
-        conversation_message_id = information_callback['conversation_message_id']
+    async def _user_not_owner_chat(self) -> None:
+        """
+        Функция, которая отправляет сообщение пользователю, если у него нет прав для активации бота
 
-        await api_vk_class.get_creater_group(peer_id)
+        :return: None
+        """
 
-        #await bot.api.messages.edit(
-        #    peer_id=peer_id,
-        #    conversation_message_id=conversation_message_id,
-        #    message="Это обновлённое сообщение!"
-        #)
+        await self.api_vk_class.send_notif(
+            peer_id=self.peer_id,
+            user_id=self.user_id,
+            event_id=self.event_id,
+            message="❌ У вас нет прав для активации бота в данной беседе!"
+        )
+
+    async def _bot_not_is_admin(self) -> None:
+        """
+        Функция, которая отправляет сообщение, что у бота нет админки беседы в случае,
+        если функция `bot_is_admin_in_chat`, возвращает None, иначе,
+        запускает функцию `_user_not_owner_chat`
+
+        :return: None
+        """
+        if not await self.api_vk_class.bot_is_admin_in_chat(self.peer_id):
+            await self.api_vk_class.send_notif(peer_id=self.peer_id, user_id=self.user_id, event_id=self.event_id, message="❌ У бота нет прав администратора в беседе!")
+        else: await self._user_not_owner_chat()
+
+    async def _user_owner_chat(self) -> None:
+        """
+        Функция, которая отправляет сообщение об успешной активации бота
+
+        :return: None
+        """
+        await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, "✅ Бот успешно активирован! Пропишите '/help', чтобы узнать все команды!")
+
+    async def _realization_callback(self, information_callback, api_vk_class):
+        self.api_vk_class = api_vk_class
+
+        self.user_id = information_callback['user_id']
+        self.peer_id = information_callback['peer_id']
+        self.event_id = information_callback['event_id']
+        self.conversation_message_id = information_callback['conversation_message_id']
+
+        is_owner = await api_vk_class.is_creater_chat(id_user=self.user_id, peer_id=self.peer_id)
+
+        if is_owner: await self._user_owner_chat()
+        else: await self._bot_not_is_admin()
+
+    async def realization_callback(self, information_callback, api_vk_class): await self._realization_callback(information_callback, api_vk_class)
+
 
 class CJoinGroup:
     TEXT_JOIN_MESSAGE = (
