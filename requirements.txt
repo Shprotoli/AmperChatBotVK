@@ -1,0 +1,4 @@
+python-dotenv==1.0.1
+requests==2.32.3
+vkbottle==4.4.3.post1
+vkbottle-types==5.199.63.3.post1
