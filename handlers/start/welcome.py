@@ -12,7 +12,6 @@ class CStartBot(ACallbackHandler):
 
         :return: None
         """
-
         await self.api_vk_class.send_notif(
             peer_id=self.peer_id,
             user_id=self.user_id,
