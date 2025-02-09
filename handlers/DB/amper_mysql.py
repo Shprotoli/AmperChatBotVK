@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
 from AmperChatBot.handlers.ABC.ABCAmperDataBase import ADataModel
@@ -11,7 +11,7 @@ class DInitedChat(ADataModel):
     def __init__(self, session):
         self.session = session
 
-    async def _add_chat(self, id_chat: int):
+    async def _add_chat(self, id_chat: int) -> None:
         """
         Добавляет новый чат в базу данных
 
@@ -22,7 +22,15 @@ class DInitedChat(ADataModel):
             session.add(new_chat)
             session.commit()
 
-    async def add_chat(self, id_chat) -> None: await self._add_chat(id_chat)
+    async def _get_chat(self, id_chat: int) -> "InitedChat":
+        with self.session() as session:
+            stmt = select(InitedChat).where(InitedChat.id_chat == id_chat)
+            result = session.execute(stmt)
+            return result.scalars().first()
+
+    async def add_chat(self, id_chat): await self._add_chat(id_chat)
+
+    async def get_chat(self, id_chat) -> str: return await self._get_chat(id_chat)
 
 
 class DAmperMySQL:

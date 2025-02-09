@@ -37,12 +37,20 @@ class CStartBot(ACallbackHandler):
 
     async def _user_owner_chat(self) -> None:
         """
-        Функция, которая отправляет сообщение об успешной активации бота
+        Функция, которая отправляет сообщение об успешной активации бота.
 
+        :param chat_in_db: Поле отвечает за проверку был ли чат активирован до этого
+            - `True`: Если поле chat_in_db является True, то бот уже был активирован до этого
+            - `False`: Если False, то бот еще не был активирован до этого
         :return: None
         """
-        await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, "✅ Бот успешно активирован! Пропишите '/help', чтобы узнать все команды!")
-        await self.db.add_chat(self.peer_id)
+        chat_in_db = await self.db.get_chat(self.peer_id)
+
+        if not chat_in_db:
+            await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, "✅ Бот успешно активирован! Пропишите '/help', чтобы узнать все команды!")
+            await self.db.add_chat(self.peer_id)
+        else:
+            await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, "❌ Бот уже активирован! Пропишите '/help', чтобы узнать все команды!")
 
     async def _realization_callback(self, information_callback, api_vk_class):
         self.api_vk_class = api_vk_class

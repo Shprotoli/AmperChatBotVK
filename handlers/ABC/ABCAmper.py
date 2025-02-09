@@ -4,9 +4,21 @@ from typing import Union, Optional
 
 class ACallbackHandler(ABC):
     @abstractmethod
-    async def realization_callback(self, information_callback: dict, api_vk_class: "AApiVk") -> None:
+    async def _realization_callback(self, information_callback: dict, api_vk_class: "AApiVk") -> None:
         """
         Функция для реализация ответа на callback запрос.
+
+        :param event_id: Строка с уникальным `ID` события
+        :param information_callback: Словарь, в котором находится информация о callback
+        :param api_vk_class: Класс 'CApiVk', с помощью которого можно взаимодействовать с API VK
+        :return: None
+        """
+        pass
+
+    @abstractmethod
+    async def realization_callback(self, information_callback: dict, api_vk_class: "AApiVk") -> None:
+        """
+        Функция для вызова реализации ответа на callback запрос.
 
         :param event_id: Строка с уникальным `ID` события
         :param information_callback: Словарь, в котором находится информация о callback
