@@ -7,6 +7,7 @@ from AmperChatBot.handlers.ABC.ABCAmper import ACallbackHandler
 from AmperChatBot.handlers.DB.amper_mysql import DInitedChat
 
 class CStartBot(ACallbackHandler):
+    """Класс для обработки события нажатия на кнопку `Старт` в первом приветствии от бота"""
     def __init__(self, db: "DInitedChat"):
         self.db = db
 
@@ -69,6 +70,7 @@ class CStartBot(ACallbackHandler):
 
 
 class CJoinGroup:
+    """Класс для обработки логики подключения бота к беседе"""
     TEXT_JOIN_MESSAGE = (
         "Привет! Amper теперь в вашей беседе 🥳\n\n"
         "Для дальнейшей работы нужно дать боту права администратора, а затем нажать кнопку 'Старт' 🚀"

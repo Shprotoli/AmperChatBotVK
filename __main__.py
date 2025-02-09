@@ -32,7 +32,7 @@ class AmperBotInit(Bot):
         :return: None
         """
         self.db = DAmperMySQL()
-        self.db._init_database()
+        self.db.init_database()
 
     def _register_handlers(self) -> None:
         """Инициализация обработчиков бота"""

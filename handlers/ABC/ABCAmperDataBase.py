@@ -1,3 +1,4 @@
+"""ABCAmperDataBase.py - Файл для абстрактных классов баз данных"""
 from abc import ABC, abstractmethod
 
 class ADataModel(ABC):

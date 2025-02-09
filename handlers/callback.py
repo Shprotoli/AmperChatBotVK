@@ -8,6 +8,7 @@ from AmperChatBot.handlers.start.welcome import CStartBot
 from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 
 class CCallbackHandler:
+    """Класс для обработки событий (handlers)"""
     def __init__(self, bot: Bot, api_vk_class, db: "DAmperMySQL"):
         self.bot = bot
         self.db = db
