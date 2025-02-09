@@ -21,7 +21,7 @@ class AmperBotInit(Bot):
 
         self.join_group_ekz = CJoinGroup()
         self.api_vk_ekz = CApiVK(self)
-        self.callback_handler_ekz = CCallbackHandler(self, self.api_vk_ekz)
+        self.callback_handler_ekz = CCallbackHandler(self, self.api_vk_ekz, self.db)
 
         self._register_handlers()
 
@@ -32,7 +32,7 @@ class AmperBotInit(Bot):
         :return: None
         """
         self.db = DAmperMySQL()
-        await self.db._init_database()
+        self.db._init_database()
 
     def _register_handlers(self) -> None:
         """Инициализация обработчиков бота"""

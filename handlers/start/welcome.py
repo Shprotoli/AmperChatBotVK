@@ -4,8 +4,12 @@ from vkbottle.bot import Message, Bot
 from vkbottle import Keyboard, KeyboardButtonColor, Callback
 
 from AmperChatBot.handlers.ABC.ABCAmper import ACallbackHandler
+from AmperChatBot.handlers.DB.amper_mysql import DInitedChat
 
 class CStartBot(ACallbackHandler):
+    def __init__(self, db: "DInitedChat"):
+        self.db = db
+
     async def _user_not_owner_chat(self) -> None:
         """
         Функция, которая отправляет сообщение пользователю, если у него нет прав для активации бота
@@ -38,6 +42,7 @@ class CStartBot(ACallbackHandler):
         :return: None
         """
         await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, "✅ Бот успешно активирован! Пропишите '/help', чтобы узнать все команды!")
+        await self.db.add_chat(self.peer_id)
 
     async def _realization_callback(self, information_callback, api_vk_class):
         self.api_vk_class = api_vk_class
