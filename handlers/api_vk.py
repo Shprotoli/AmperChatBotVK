@@ -8,7 +8,7 @@ from AmperChatBot.handlers.ABC.ABCAmper import AApiVk
 
 class CApiVK(AApiVk):
     def __init__(self, bot: Bot):
-        self.bot = bot
+        self.bot = Bot
 
     async def _get_creater_chat(self, peer_id):
         try:
@@ -54,6 +54,6 @@ class CApiVK(AApiVk):
 
     async def bot_is_admin_in_chat(self, peer_id): return await self._bot_is_admin_in_chat(peer_id)
 
-    async def edit_message_chat(self, peer_id, conversation_message_id, message, keyboard): await self._edit_message_chat(peer_id, conversation_message_id, message, keyboard)
+    async def edit_message_chat(self, peer_id, conversation_message_id, message, keyboard=None): await self._edit_message_chat(peer_id, conversation_message_id, message, keyboard)
 
     async def send_notif(self, peer_id, event_id, user_id, message): await self._send_notif(peer_id, event_id, user_id, message)

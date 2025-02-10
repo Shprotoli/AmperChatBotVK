@@ -93,7 +93,7 @@ class AApiVk(ABC):
         pass
 
     @abstractmethod
-    async def edit_message_chat(self, peer_id: Union[str, int], conversation_message_id: Union[str, int], message: str, keyboard: tuple) -> None:
+    async def edit_message_chat(self, peer_id: Union[str, int], conversation_message_id: Union[str, int], message: str, keyboard: tuple=None) -> None:
         """
         Функция для редактирования сообщения в беседе
 

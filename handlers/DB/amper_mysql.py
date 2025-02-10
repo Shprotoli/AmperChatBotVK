@@ -40,6 +40,12 @@ class DInitedChat(ADataModel):
 
 
 class DAmperMySQL:
+    DB = None
+    def __new__(cls, *args, **kwargs):
+        if not cls.DB:
+            cls.DB = super(DAmperMySQL, cls).__new__(cls)
+        return cls.DB
+
     def __init__(self):
         self.engine = create_engine("mysql+pymysql://shprot:shprot@localhost:3307/amper", echo=True, pool_size=20)
         self.session = sessionmaker(

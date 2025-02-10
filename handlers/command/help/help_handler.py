@@ -1,5 +1,6 @@
 from vkbottle import Keyboard, KeyboardButtonColor, Callback
 
+from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
 from AmperChatBot.handlers.ABC.ABCAmper import ACallbackHandler
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT
@@ -130,4 +131,5 @@ class CHelp(AHandlerCommand):
         text_lvl, keyboard = await get_lvl_setting(0)
         await message.answer(text_lvl, keyboard=keyboard)
 
+    @checked_root_user(started_chat=True)
     async def realization_command(self, message, args=None) -> None: await self._realization_command(message, args)
