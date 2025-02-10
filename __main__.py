@@ -3,14 +3,16 @@
 from asyncio import run
 
 from vkbottle.bot import Bot
-from vkbottle.dispatch.rules.base import ChatActionRule
+from vkbottle.dispatch.rules.base import ChatActionRule, CommandRule
 from vkbottle_types.events import GroupEventType
 
 from _init.config import token, labeler
 # HANDLERS
-from handlers.callback import CCallbackHandler
-from handlers.start.welcome import CJoinGroup
+from AmperChatBot.handlers.callback.callback import CCallbackHandler
+from AmperChatBot.handlers.callback.start.welcome_callback import CJoinGroup
 from handlers.api_vk import CApiVK
+# COMMAND
+from AmperChatBot.handlers.command.help.help_handler import CHelp
 # DataBase
 from handlers.DB.amper_mysql import DAmperMySQL
 
@@ -19,11 +21,10 @@ class AmperBotInit(Bot):
         super().__init__(token, labeler=labeler)
         run(self._connect_database())
 
-        self.join_group_ekz = CJoinGroup()
         self.api_vk_ekz = CApiVK(self)
-        self.callback_handler_ekz = CCallbackHandler(self, self.api_vk_ekz, self.db)
 
         self._register_handlers()
+        self._register_command()
 
     async def _connect_database(self):
         """
@@ -35,9 +36,18 @@ class AmperBotInit(Bot):
         self.db.init_database()
 
     def _register_handlers(self) -> None:
+        join_group_ekz = CJoinGroup()
+        callback_handler_ekz = CCallbackHandler(self, self.api_vk_ekz, self.db)
+
         """Инициализация обработчиков бота"""
-        labeler.chat_message(ChatActionRule("chat_invite_user"))(self.join_group_ekz.join_group)
-        labeler.raw_event(GroupEventType.MESSAGE_EVENT)(self.callback_handler_ekz.callback_handler)
+        labeler.chat_message(ChatActionRule("chat_invite_user"))(join_group_ekz.join_group)
+        labeler.raw_event(GroupEventType.MESSAGE_EVENT)(callback_handler_ekz.callback_handler)
+
+    def _register_command(self) -> None:
+        help_ekz = CHelp()
+
+        """Инициализация обработчика команд"""
+        labeler.chat_message(CommandRule(help_ekz.COMMAND, help_ekz.PREFIX, help_ekz.ARGS))(help_ekz.realization_command)
 
 if __name__ == "__main__":
     bot = AmperBotInit(token)

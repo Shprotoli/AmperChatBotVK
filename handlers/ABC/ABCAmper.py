@@ -1,6 +1,34 @@
 """ABCAmper.py - Файл предназначеный для абстрактных классов бота"""
 from abc import ABC, abstractmethod
-from typing import Union, Optional
+from typing import Union, Optional, Tuple
+
+from vkbottle.bot import Message
+
+class AHandlerCommand(ABC):
+    COMMAND = str # Команда для handler, например `help`
+    PREFIX = () # Префикс для команды, например `("/", ".")`
+    ARGS = int # Количество аргументов, например `2`
+    @abstractmethod
+    async def _realization_command(self, message: Message, args: Tuple[str]) -> None:
+        """
+        Функция, которая реализуют ответ на команду
+
+        :param message_event: Информация о команде
+        :param api_vk_class: Класс 'CApiVk', с помощью которого можно взаимодействовать с API VK
+        :return: None
+        """
+        pass
+
+    @abstractmethod
+    async def realization_command(self, message: Message, args: Tuple[str]) -> None:
+        """
+        Функция, которая реализуют ответ на команду
+
+        :param message_event: Информация о команде
+        :param api_vk_class: Класс 'CApiVk', с помощью которого можно взаимодействовать с API VK
+        :return: None
+        """
+        pass
 
 class ACallbackHandler(ABC):
     @abstractmethod
@@ -65,13 +93,14 @@ class AApiVk(ABC):
         pass
 
     @abstractmethod
-    async def edit_message_chat(self, peer_id: Union[str, int], conversation_message_id: Union[str, int], message: str) -> None:
+    async def edit_message_chat(self, peer_id: Union[str, int], conversation_message_id: Union[str, int], message: str, keyboard: tuple) -> None:
         """
         Функция для редактирования сообщения в беседе
 
         :param peer_id: ID группы
         :param conversation_message_id: ID сообщения
         :param message: На какое сообщение меняем
+        :param keyboard: Клавиатура в сообщении
         :return: None
         """
         pass

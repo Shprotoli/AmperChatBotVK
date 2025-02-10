@@ -30,11 +30,12 @@ class CApiVK(AApiVk):
             if e.code == 917:
                 return False
 
-    async def _edit_message_chat(self, peer_id, conversation_message_id, message):
+    async def _edit_message_chat(self, peer_id, conversation_message_id, message, keyboard):
         await self.bot.api.messages.edit(
            peer_id=peer_id,
            conversation_message_id=conversation_message_id,
-           message=message
+           message=message,
+           keyboard=keyboard,
         )
 
     import json
@@ -53,6 +54,6 @@ class CApiVK(AApiVk):
 
     async def bot_is_admin_in_chat(self, peer_id): return await self._bot_is_admin_in_chat(peer_id)
 
-    async def edit_message_chat(self, peer_id, conversation_message_id, message): await self._edit_message_chat(peer_id, conversation_message_id, message)
+    async def edit_message_chat(self, peer_id, conversation_message_id, message, keyboard): await self._edit_message_chat(peer_id, conversation_message_id, message, keyboard)
 
     async def send_notif(self, peer_id, event_id, user_id, message): await self._send_notif(peer_id, event_id, user_id, message)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""welcome.py - Файл предназначен для обработки команд связанных с вступлением бота в группу"""
-from vkbottle.bot import Message, Bot
+"""welcome_callback.py - Файл предназначен для обработки команд связанных с вступлением бота в группу"""
+from vkbottle.bot import Message
 from vkbottle import Keyboard, KeyboardButtonColor, Callback
 
 from AmperChatBot.handlers.ABC.ABCAmper import ACallbackHandler
@@ -81,4 +81,5 @@ class CJoinGroup:
         .add(Callback("Старт", payload={"command": "start_bot_chat"}), color=KeyboardButtonColor.POSITIVE)
     )
 
-    async def join_group(self, message: Message): await message.answer(self.TEXT_JOIN_MESSAGE, keyboard=self.KEYBOARD_START)
+    async def join_group(self, message: Message):
+        if message.action.member_id == -228701807: await message.answer(self.TEXT_JOIN_MESSAGE, keyboard=self.KEYBOARD_START)
