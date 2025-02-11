@@ -1,14 +1,13 @@
 """api_vk.py - Файл предназначенный для работы с API вконтакнте"""
 from json import dumps
 
-from vkbottle import Bot
 from vkbottle.exception_factory.base_exceptions import VKAPIError
 
 from AmperChatBot.handlers.ABC.ABCAmper import AApiVk
 
 class CApiVK(AApiVk):
-    def __init__(self, bot: Bot):
-        self.bot = Bot
+    def __init__(self, bot):
+        self.bot = bot
 
     async def _get_creater_chat(self, peer_id):
         try:
@@ -38,14 +37,19 @@ class CApiVK(AApiVk):
            keyboard=keyboard,
         )
 
-    import json
-
     async def _send_notif(self, peer_id, event_id, user_id, message):
         await self.bot.api.messages.send_message_event_answer(
             event_id=event_id,
             peer_id=peer_id,
             user_id=user_id,
             event_data=dumps({"type": "show_snackbar", "text": message}),
+        )
+
+    async def _send_message(self, peer_id, message_text):
+        await self.bot.api.messages.send(
+            peer_id=peer_id,
+            message=message_text,
+            random_id=0
         )
 
     async def get_creater_chat(self, peer_id): return await self._get_creater_chat(peer_id)
@@ -57,3 +61,5 @@ class CApiVK(AApiVk):
     async def edit_message_chat(self, peer_id, conversation_message_id, message, keyboard=None): await self._edit_message_chat(peer_id, conversation_message_id, message, keyboard)
 
     async def send_notif(self, peer_id, event_id, user_id, message): await self._send_notif(peer_id, event_id, user_id, message)
+
+    async def send_message(self, peer_id, message_text): await self._send_message(peer_id, message_text)

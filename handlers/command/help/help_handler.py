@@ -1,3 +1,4 @@
+"""help_handler.py - Файл, который содержит всю информацию связанную с командой `help`"""
 from vkbottle import Keyboard, KeyboardButtonColor, Callback
 
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
@@ -126,6 +127,9 @@ class CHelp(AHandlerCommand):
     COMMAND = "help"
     PREFIX = PREFIX_DEFAULT
     ARGS = 0
+
+    def __init__(self, bot):
+        self.bot = bot
 
     async def _realization_command(self, message, args=None) -> None:
         text_lvl, keyboard = await get_lvl_setting(0)
