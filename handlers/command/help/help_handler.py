@@ -1,9 +1,10 @@
 """help_handler.py - Файл, который содержит всю информацию связанную с командой `help`"""
-from vkbottle import Keyboard, KeyboardButtonColor, Callback, Bot
+from vkbottle import Keyboard, KeyboardButtonColor, Callback
 
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
 from AmperChatBot.handlers.ABC.ABCAmper import ACallbackHandler
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
+from AmperChatBot.handlers.api_vk import CApiVK
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT
 
 async def get_lvl_setting(lvl: int) -> tuple:
@@ -15,14 +16,22 @@ async def get_lvl_setting(lvl: int) -> tuple:
         .row()
         .add(Callback("2 уровень", payload={"command": "two_lvl"}), color=KeyboardButtonColor.POSITIVE if lvl == 2 else KeyboardButtonColor.SECONDARY)
         .add(Callback("3 уровень", payload={"command": "free_lvl"}), color=KeyboardButtonColor.POSITIVE if lvl == 3 else KeyboardButtonColor.SECONDARY)
+        .row()
+        .add(Callback("Владелец чата", payload={"command": "owner_lvl"}), color=KeyboardButtonColor.POSITIVE if lvl == -1 else KeyboardButtonColor.SECONDARY)
     )
 
     match lvl:
+        case -1:
+            text_lvl = (
+                "📒 В этом разделе вы можете посмотреть все доступные команды на разных уровнях админ-прав.\n\n"
+                "⚡ Команды для владельца чата:\n\n"
+            )
         case 0:
             text_lvl = (
                 "📒 В этом разделе вы можете посмотреть все доступные команды на разных уровнях админ-прав.\n\n"
                 "⚡ Команды для пользователя без админ-прав:\n\n"
-                "/help - Просмотр списка команд"
+                "/help - Просмотр списка команд\n"
+                "/info - Информация о чате\n"
             )
         case 1:
             text_lvl = (
@@ -105,7 +114,19 @@ class CLvlInformation(ACallbackHandler):
 
         await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, message=text_lvl, keyboard=keyboard)
 
+    async def _realization_callback_lvl_owner(self):
+        """
+        Реализация callback ответа на запрос с информацией владельца беседы
 
+        :return: None
+        """
+        await self._set_author_callback()
+        text_lvl, keyboard = await get_lvl_setting(-1)
+
+        await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, message=text_lvl, keyboard=keyboard)
+
+
+    async def realization_callback_lvl_owner(self): await self._realization_callback_lvl_owner()
     async def realization_callback_lvl_zero(self): await self._realization_callback_lvl_zero()
     async def realization_callback_lvl_one(self): await self._realization_callback_lvl_one()
     async def realization_callback_lvl_two(self): await self._realization_callback_lvl_two()
@@ -128,7 +149,7 @@ class CHelp(AHandlerCommand):
     PREFIX = PREFIX_DEFAULT
     ARGS = 0
 
-    def __init__(self, bot: Bot):
+    def __init__(self, bot: CApiVK):
         self.bot = bot
 
     async def _realization_command(self, message, args=None) -> None:

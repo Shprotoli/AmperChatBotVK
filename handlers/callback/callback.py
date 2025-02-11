@@ -24,6 +24,10 @@ class CCallbackHandler:
         match type_callback:
             case "start_bot_chat":
                 await self.start_bot_ekz.realization_callback(callback, self.api_vk_ekz)
+            case "owner_lvl":
+                lvl_info_ekz = CLvlInformation()
+                await lvl_info_ekz.realization_callback(callback, self.api_vk_ekz)
+                await lvl_info_ekz.realization_callback_lvl_owner()
             case "zero_lvl":
                 lvl_info_ekz = CLvlInformation()
                 await lvl_info_ekz.realization_callback(callback, self.api_vk_ekz)
