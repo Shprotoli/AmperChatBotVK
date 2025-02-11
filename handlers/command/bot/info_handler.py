@@ -1,3 +1,5 @@
+from vkbottle import Bot
+
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT
@@ -12,7 +14,7 @@ class CInfo(AHandlerCommand):
         "💭 Информация о данной беседе:"
     )
 
-    def __init__(self, bot):
+    def __init__(self, bot: Bot):
         self.bot = bot
 
     async def _realization_command(self, message, args=None) -> None:
