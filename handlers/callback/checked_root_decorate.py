@@ -1,18 +1,21 @@
+"""checked_root_decorate.py - Р¤Р°Р№Р» СЃ РґРµРєРѕСЂР°С‚РѕСЂРѕРј РґР»СЏ РїСЂРѕРІРµСЂРєРё СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ, РєРѕС‚РѕСЂС‹Р№ РїСЂРѕРїРёСЃР°Р» РєРѕРјР°РЅРґСѓ РІСЃРµРј РєСЂРёС‚РµСЂРёСЏРј"""
 from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 
 def checked_root_user(started_chat: bool=False):
     def decorator(func):
         async def wrapper(*args, **kwargs):
+            api = args[0].bot
             peer_id = args[1].dict().get("peer_id")
+
             if started_chat:
                 """
-                Проверка на то, что бот уже инициализирован в базе данных (т.е. нажали `старт` в перво сообщении бота)
+                РџСЂРѕРІРµСЂРєР° РЅР° С‚Рѕ, С‡С‚Рѕ Р±РѕС‚ СѓР¶Рµ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С… (С‚.Рµ. РЅР°Р¶Р°Р»Рё `СЃС‚Р°СЂС‚` РІ РїРµСЂРІРѕ СЃРѕРѕР±С‰РµРЅРёРё Р±РѕС‚Р°)
                     response_chat_init:
-                        - `True`: Если бот найден в базе данных (т.е. инициализирован) то проверка пройдена
-                        - `False/None`: Если бот не найден в базе данных то возвращаем уведомление
+                        - `True`: Р•СЃР»Рё Р±РѕС‚ РЅР°Р№РґРµРЅ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С… (С‚.Рµ. РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅ) С‚Рѕ РїСЂРѕРІРµСЂРєР° РїСЂРѕР№РґРµРЅР°
+                        - `False/None`: Р•СЃР»Рё Р±РѕС‚ РЅРµ РЅР°Р№РґРµРЅ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С… С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј СѓРІРµРґРѕРјР»РµРЅРёРµ
                 """
                 response_chat_init = await DAmperMySQL().inited_chat_db.get_chat(peer_id)
-                if not response_chat_init: return
+                if not response_chat_init: return await api.send_message(peer_id, "вќЊ РђРєС‚РёРІРёСЂСѓР№С‚Рµ Р±РѕС‚Р° РґР»СЏ РґР°Р»СЊРЅРµР№С€РµР№ СЂР°Р±РѕС‚С‹")
             return await func(*args, **kwargs)
         return wrapper
     return decorator
