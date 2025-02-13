@@ -6,9 +6,21 @@ from vkbottle import Bot
 
 from AmperChatBot.handlers.ABC.ABCAmper import AApiVk
 
+class CPunishmentApiVK:
+    def __init__(self, bot: "Bot"):
+        self.bot = bot
+
+    async def _kick(self, chat_id, user_id) -> None:
+        await self.bot.api.messages.remove_chat_user(chat_id, user_id)
+
+
+    async def kick(self, chat_id, user_id) -> None: await self._kick(chat_id, user_id)
+
 class CApiVK(AApiVk):
     def __init__(self, bot: Bot):
         self.bot = bot
+
+        self._punishment = CPunishmentApiVK(bot)
 
     async def _get_creater_chat(self, peer_id):
         try:
@@ -55,6 +67,10 @@ class CApiVK(AApiVk):
 
     async def _get_info_chat(self, peer_id):
         return await self.bot.api.messages.get_conversations_by_id(peer_ids=peer_id)
+
+
+    @property
+    def punishment(self) -> "CPunishmentApiVK": return self._punishment
 
 
     async def get_creater_chat(self, peer_id): return await self._get_creater_chat(peer_id)

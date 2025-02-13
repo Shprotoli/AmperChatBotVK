@@ -5,7 +5,7 @@ from typing import Any
 from vkbottle.bot import Bot
 
 from AmperChatBot.handlers.callback.start.welcome_callback import CStartBot
-from AmperChatBot.handlers.command.help.help_handler import CLvlInformation
+from AmperChatBot.handlers.command.one_lvl.help.help_handler import CLvlInformation
 from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 
 class CCallbackHandler:

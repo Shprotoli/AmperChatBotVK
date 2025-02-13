@@ -32,6 +32,7 @@ async def get_lvl_setting(lvl: int) -> tuple:
                 "⚡ Команды для пользователя без админ-прав:\n\n"
                 "/help - Просмотр списка команд\n"
                 "/info - Информация о чате\n"
+                "/q - Покинуть чат\n"
             )
         case 1:
             text_lvl = (

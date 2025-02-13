@@ -9,6 +9,17 @@ class AHandlerCommand(ABC):
     COMMAND = str # Команда для handler, например `help`
     PREFIX = () # Префикс для команды, например `("/", ".")`
     ARGS = int # Количество аргументов, например `2`
+
+    @abstractmethod
+    def __init__(self, bot: "AApiVk"):
+        """
+        Установки переменной, которая будет работать с VK API
+
+        :param bot: экземпляр класса, через который можно взаимодействовать с VK API
+        """
+        #self.bot = bot
+        pass
+
     @abstractmethod
     async def _realization_command(self, message: Message, args: Tuple[str]) -> None:
         """

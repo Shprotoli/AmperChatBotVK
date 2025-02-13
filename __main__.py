@@ -12,8 +12,9 @@ from AmperChatBot.handlers.callback.callback import CCallbackHandler
 from AmperChatBot.handlers.callback.start.welcome_callback import CJoinGroup
 from handlers.api_vk import CApiVK
 # COMMAND
-from AmperChatBot.handlers.command.help.help_handler import CHelp
-from AmperChatBot.handlers.command.bot.info_handler import CInfo
+from AmperChatBot.handlers.command.one_lvl.help.help_handler import CHelp
+from AmperChatBot.handlers.command.one_lvl.help.info_handler import CInfo
+from AmperChatBot.handlers.command.one_lvl.other.q_handler import CQuit
 # DataBase
 from handlers.DB.amper_mysql import DAmperMySQL
 
@@ -47,10 +48,12 @@ class AmperBotInit(Bot):
     def _register_command(self) -> None:
         help_ekz = CHelp(self.api_vk_ekz)
         info_ekz = CInfo(self.api_vk_ekz)
+        quit_ekz = CQuit(self.api_vk_ekz)
 
         """Инициализация обработчика команд"""
         labeler.chat_message(CommandRule(help_ekz.COMMAND, help_ekz.PREFIX, help_ekz.ARGS))(help_ekz.realization_command)
         labeler.chat_message(CommandRule(info_ekz.COMMAND, info_ekz.PREFIX, info_ekz.ARGS))(info_ekz.realization_command)
+        labeler.chat_message(CommandRule(quit_ekz.COMMAND, quit_ekz.PREFIX, quit_ekz.ARGS))(quit_ekz.realization_command)
 
 if __name__ == "__main__":
     bot = AmperBotInit(token)

@@ -15,7 +15,7 @@ class CInfo(AHandlerCommand):
 
     TEXT = "💭 Информация о данной беседе:\n\n"
 
-    def __init__(self, bot: CApiVK):
+    def __init__(self, bot: "CApiVK"):
         self.bot = bot
 
     async def _get_setting_chat(self, response: Union[MessagesGetConversationByIdExtended, MessagesGetConversationById]) -> None:
