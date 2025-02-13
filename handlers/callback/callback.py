@@ -5,7 +5,7 @@ from typing import Any
 from vkbottle.bot import Bot
 
 from AmperChatBot.handlers.callback.start.welcome_callback import CStartBot
-from AmperChatBot.handlers.command.one_lvl.help.help_handler import CLvlInformation
+from AmperChatBot.handlers.command.zero_lvl.help.help_handler import CLvlInformation
 from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 
 class CCallbackHandler:
@@ -32,7 +32,7 @@ class CCallbackHandler:
                 lvl_info_ekz = CLvlInformation()
                 await lvl_info_ekz.realization_callback(callback, self.api_vk_ekz)
                 await lvl_info_ekz.realization_callback_lvl_zero()
-            case "one_lvl":
+            case "zero_lvl":
                 lvl_info_ekz = CLvlInformation()
                 await lvl_info_ekz.realization_callback(callback, self.api_vk_ekz)
                 await lvl_info_ekz.realization_callback_lvl_one()

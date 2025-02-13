@@ -14,7 +14,7 @@ def checked_root_user(started_chat: bool=False):
                         - `True`: Если бот найден в базе данных (т.е. инициализирован) то проверка пройдена
                         - `False/None`: Если бот не найден в базе данных то возвращаем уведомление
                 """
-                response_chat_init = await DAmperMySQL().inited_chat_db.get_chat(peer_id)
+                response_chat_init = await DAmperMySQL().inited_chat_db.get(peer_id)
                 if not response_chat_init: return await api.send_message(peer_id, "❌ Активируйте бота для дальнейшей работы")
             return await func(*args, **kwargs)
         return wrapper

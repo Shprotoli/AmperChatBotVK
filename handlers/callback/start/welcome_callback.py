@@ -45,11 +45,11 @@ class CStartBot(ACallbackHandler):
             - `False`: Если False, то бот еще не был активирован до этого
         :return: None
         """
-        chat_in_db = await self.db.get_chat(self.peer_id)
+        chat_in_db = await self.db.get(self.peer_id)
 
         if not chat_in_db:
             await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, "✅ Бот успешно активирован! Пропишите '/help', чтобы узнать все команды!")
-            await self.db.add_chat(self.peer_id)
+            await self.db.add(self.peer_id)
         else:
             await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, "❌ Бот уже активирован! Пропишите '/help', чтобы узнать все команды!")
 

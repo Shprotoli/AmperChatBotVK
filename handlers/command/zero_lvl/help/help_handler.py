@@ -12,7 +12,7 @@ async def get_lvl_setting(lvl: int) -> tuple:
     keyboard = (
         Keyboard(inline=True)
         .add(Callback("Без уровня", payload={"command": "zero_lvl"}), color=KeyboardButtonColor.POSITIVE if lvl == 0 else KeyboardButtonColor.SECONDARY)
-        .add(Callback("1 уровень", payload={"command": "one_lvl"}), color=KeyboardButtonColor.POSITIVE if lvl == 1 else KeyboardButtonColor.SECONDARY)
+        .add(Callback("1 уровень", payload={"command": "zero_lvl"}), color=KeyboardButtonColor.POSITIVE if lvl == 1 else KeyboardButtonColor.SECONDARY)
         .row()
         .add(Callback("2 уровень", payload={"command": "two_lvl"}), color=KeyboardButtonColor.POSITIVE if lvl == 2 else KeyboardButtonColor.SECONDARY)
         .add(Callback("3 уровень", payload={"command": "free_lvl"}), color=KeyboardButtonColor.POSITIVE if lvl == 3 else KeyboardButtonColor.SECONDARY)

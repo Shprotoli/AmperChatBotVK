@@ -12,6 +12,22 @@ class DLvlAdminRoot(ADataModel):
     def __init__(self, session):
         self.session = session
 
+    async def _add(self, id_user: int, id_chat: int, lvl_admin_root: int) -> None:
+        """
+        Добавляет права администратора пользователю в заданном чате, добавляя в базу данных `lvl_admin_root`
+
+        :param id_user: ID пользователя
+        :param id_chat: ID чата для добавления
+        :param lvl_admin_root: Уровень администратора
+        :return: None
+        """
+        with self.session() as session:
+            new_admin = LvlAdminRoot(id_user, id_chat, lvl_admin_root)
+            session.add(new_admin)
+            session.commit()
+
+    async def add(self, id_user: int, id_chat: int, lvl_admin_root: int) -> None: await self._add(id_user, id_chat, lvl_admin_root)
+
 class DInitedChat(ADataModel):
     def __init__(self, session):
         self.session = session

@@ -12,9 +12,9 @@ from AmperChatBot.handlers.callback.callback import CCallbackHandler
 from AmperChatBot.handlers.callback.start.welcome_callback import CJoinGroup
 from handlers.api_vk import CApiVK
 # COMMAND
-from AmperChatBot.handlers.command.one_lvl.help.help_handler import CHelp
-from AmperChatBot.handlers.command.one_lvl.help.info_handler import CInfo
-from AmperChatBot.handlers.command.one_lvl.other.q_handler import CQuit
+from AmperChatBot.handlers.command.zero_lvl.help.help_handler import CHelp
+from AmperChatBot.handlers.command.zero_lvl.help.info_handler import CInfo
+from AmperChatBot.handlers.command.zero_lvl.other.q_handler import CQuit
 # DataBase
 from handlers.DB.amper_mysql import DAmperMySQL
 
