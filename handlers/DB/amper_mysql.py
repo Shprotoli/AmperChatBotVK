@@ -4,14 +4,19 @@ from sqlalchemy.orm import sessionmaker
 from AmperChatBot.handlers.ABC.ABCAmperDataBase import ADataModel
 from AmperChatBot.handlers.DB.Models import (
     BASE,
-    InitedChat
+    InitedChat,
+    LvlAdminRoot,
 )
+
+class DLvlAdminRoot(ADataModel):
+    def __init__(self, session):
+        self.session = session
 
 class DInitedChat(ADataModel):
     def __init__(self, session):
         self.session = session
 
-    async def _add_chat(self, id_chat: int) -> None:
+    async def _add(self, id_chat: int) -> None:
         """
         Добавляет новый чат в базу данных `inited_chat`
 
@@ -23,7 +28,7 @@ class DInitedChat(ADataModel):
             session.add(new_chat)
             session.commit()
 
-    async def _get_chat(self, id_chat: int) -> "InitedChat":
+    async def _get(self, id_chat: int) -> "InitedChat":
         """
         Функция получает чат из базы данных `inited_chat`
 
@@ -35,8 +40,8 @@ class DInitedChat(ADataModel):
             result = session.execute(stmt)
             return result.scalars().first()
 
-    async def add_chat(self, id_chat): await self._add_chat(id_chat)
-    async def get_chat(self, id_chat) -> str: return await self._get_chat(id_chat)
+    async def add(self, id_chat): await self._add(id_chat)
+    async def get(self, id_chat) -> str: return await self._get(id_chat)
 
 
 class DAmperMySQL:
@@ -56,9 +61,14 @@ class DAmperMySQL:
         self.Base = BASE
 
         self._inited_chat_db = DInitedChat(self.session)
+        self._lvl_admin_root = DLvlAdminRoot(self.session)
 
     @property
     def inited_chat_db(self): return self._inited_chat_db
+
+    @property
+    def lvl_admin_root(self): return self._lvl_admin_root
+
 
     def init_database(self) -> None:
         """
