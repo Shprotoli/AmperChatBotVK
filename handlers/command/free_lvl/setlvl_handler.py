@@ -18,6 +18,16 @@ class CSetLvl(AHandlerCommand):
         if "|" in user_info: return int(user_info.split("|")[0].replace("[id", ""))
 
     async def _check_set_admin_root(self, owner_id: int, request_id_user: int, set_lvl_admin: int, peer_id: int) -> bool:
+        """
+        Функция проверки то, что уровень, который пытаемся установить
+        не больше и не меньше заданных параметров
+
+        :param owner_id: ID владельца чата
+        :param request_id_user: ID пользователя, который написал команду
+        :param set_lvl_admin: Уровень, который хотим установить
+        :param peer_id: ID чата
+        :return:
+        """
         if owner_id != request_id_user and set_lvl_admin == 3 or set_lvl_admin >= 4 or set_lvl_admin < 1:
             await self._lvl_admin_root_not_correct_message(peer_id)
             return False

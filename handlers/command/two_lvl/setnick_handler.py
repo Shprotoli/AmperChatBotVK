@@ -19,7 +19,14 @@ class CSetNick(AHandlerCommand):
     async def _get_id(self, user_info: str) -> int:
         if "|" in user_info: return int(user_info.split("|")[0].replace("[id", ""))
 
-    async def _check_valid_new_nick(self, new_nick: str, peer_id: int) -> bool:
+    async def _check_len_new_nick(self, new_nick: str, peer_id: int) -> bool:
+        """
+        Функция проверки ника на то, что он не меньше и не больше заданных параметров
+
+        :param new_nick: Новый ник
+        :param peer_id: ID чата
+        :return:
+        """
         if not new_nick or len(new_nick) < 3:
             await self._small_len_nick_message(peer_id)
             return False
@@ -49,7 +56,7 @@ class CSetNick(AHandlerCommand):
         id_user = await self._get_id(args[0])
         new_nick = args[1]
 
-        if not await self._check_valid_new_nick(new_nick, peer_id):
+        if not await self._check_len_new_nick(new_nick, peer_id):
             return
 
         check_user_in_db = await self.db.get(id_chat, id_user)
