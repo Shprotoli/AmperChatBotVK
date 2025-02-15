@@ -15,6 +15,7 @@ from handlers.api_vk import CApiVK
 from AmperChatBot.handlers.command.zero_lvl.help.help_handler import CHelp
 from AmperChatBot.handlers.command.zero_lvl.help.info_handler import CInfo
 from AmperChatBot.handlers.command.zero_lvl.other.q_handler import CQuit
+from AmperChatBot.handlers.command.free_lvl.setlvl_handler import CSetLvl
 # DataBase
 from handlers.DB.amper_mysql import DAmperMySQL
 
@@ -49,11 +50,13 @@ class AmperBotInit(Bot):
         help_ekz = CHelp(self.api_vk_ekz)
         info_ekz = CInfo(self.api_vk_ekz)
         quit_ekz = CQuit(self.api_vk_ekz)
+        set_lvl_ekz = CSetLvl(self.api_vk_ekz)
 
         """Инициализация обработчика команд"""
         labeler.chat_message(CommandRule(help_ekz.COMMAND, help_ekz.PREFIX, help_ekz.ARGS))(help_ekz.realization_command)
         labeler.chat_message(CommandRule(info_ekz.COMMAND, info_ekz.PREFIX, info_ekz.ARGS))(info_ekz.realization_command)
         labeler.chat_message(CommandRule(quit_ekz.COMMAND, quit_ekz.PREFIX, quit_ekz.ARGS))(quit_ekz.realization_command)
+        labeler.chat_message(CommandRule(set_lvl_ekz.COMMAND, set_lvl_ekz.PREFIX, set_lvl_ekz.ARGS))(set_lvl_ekz.realization_command)
 
 if __name__ == "__main__":
     bot = AmperBotInit(token)

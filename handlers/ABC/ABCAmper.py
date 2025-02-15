@@ -21,7 +21,7 @@ class AHandlerCommand(ABC):
         pass
 
     @abstractmethod
-    async def _realization_command(self, message: Message, args: Tuple[str]) -> None:
+    async def _realization_command(self, message: Message, args: list) -> None:
         """
         Функция, которая реализуют ответ на команду
 
@@ -32,7 +32,7 @@ class AHandlerCommand(ABC):
         pass
 
     @abstractmethod
-    async def realization_command(self, message: Message, args: Tuple[str]) -> None:
+    async def realization_command(self, message: Message, args: list) -> None:
         """
         Функция, которая реализуют ответ на команду
 
