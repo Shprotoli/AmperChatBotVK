@@ -32,7 +32,7 @@ class CCallbackHandler:
                 lvl_info_ekz = CLvlInformation()
                 await lvl_info_ekz.realization_callback(callback, self.api_vk_ekz)
                 await lvl_info_ekz.realization_callback_lvl_zero()
-            case "zero_lvl":
+            case "one_lvl":
                 lvl_info_ekz = CLvlInformation()
                 await lvl_info_ekz.realization_callback(callback, self.api_vk_ekz)
                 await lvl_info_ekz.realization_callback_lvl_one()
