@@ -15,10 +15,11 @@ from handlers.api_vk import CApiVK
 from AmperChatBot.handlers.command.zero_lvl.help.help_handler import CHelp
 from AmperChatBot.handlers.command.zero_lvl.help.info_handler import CInfo
 from AmperChatBot.handlers.command.zero_lvl.other.q_handler import CQuit
-from AmperChatBot.handlers.command.free_lvl.setlvl_handler import CSetLvl
+from AmperChatBot.handlers.command.free_lvl.lvl.setlvl_handler import CSetLvl
 from AmperChatBot.handlers.command.one_lvl.nick.setnick_handler import CSetNick
 from AmperChatBot.handlers.command.one_lvl.nick.nlist_handler import CNickList
 from AmperChatBot.handlers.command.one_lvl.nick.rnick_handler import CRemoveNick
+from AmperChatBot.handlers.command.free_lvl.lvl.dellvl_handler import CDeleteLevel
 # DataBase
 from handlers.DB.amper_mysql import DAmperMySQL
 
@@ -58,6 +59,7 @@ class AmperBotInit(Bot):
             CSetLvl(self.api_vk_ekz),
             CNickList(self.api_vk_ekz),
             CRemoveNick(self.api_vk_ekz),
+            CDeleteLevel(self.api_vk_ekz),
         )
 
         for command in commands:

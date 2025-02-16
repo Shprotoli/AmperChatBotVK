@@ -59,6 +59,27 @@ class DLvlAdminRoot(ADataModel):
                 session.commit()
                 return admin_record
 
+    async def _remove(self, id_user: int, id_chat: int) -> bool:
+        """
+        Функция для удаления прав (уровня админ-прав) пользователю
+
+        :param id_user: ID пользователя
+        :param id_chat: ID чата
+        :return: Возвращает `bool` тип в зависимости от ситуации:
+                - `True`: Если был найден в таблице и удален
+                - `False`: Если не был найден в таблице и не был удален
+        """
+        with self.session() as session:
+            smrt = delete(LvlAdminRoot).where(
+                LvlAdminRoot.id_chat == id_chat,
+                LvlAdminRoot.id_user == id_user,
+            )
+
+            result = session.execute(smrt)
+            session.commit()
+
+            return True if result.rowcount else False
+
     async def _get_mr(self, id_user: int, id_chat: int, lvl_admin_root: int) -> Optional["LvlAdminRoot"]:
         """
         Получение записи в котором поле `lvl_admin_root` равен заданному или больше
@@ -94,6 +115,7 @@ class DLvlAdminRoot(ADataModel):
     async def get_mr(self, id_user: int, id_chat: int, lvl_admin_root: int) -> Optional["LvlAdminRoot"]: return await self._get_mr(id_user, id_chat, lvl_admin_root)
     async def get(self, id_user: int, id_chat: int) -> Optional["LvlAdminRoot"]: return await self._get(id_user, id_chat)
     async def update_lvl_admin(self, id_user: int, id_chat: int, lvl: int) -> Optional["LvlAdminRoot"]: await self._update_lvl_admin(id_user, id_chat, lvl)
+    async def remove(self, id_user: int, id_chat: int) -> bool: return await self._remove(id_user, id_chat)
 
 class DNickName(ADataModel):
     def __init__(self, session):
