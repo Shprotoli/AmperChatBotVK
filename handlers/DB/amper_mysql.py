@@ -141,6 +141,14 @@ class DNickName(ADataModel):
                 session.commit()
                 return admin_record
 
+    async def _get_more(self, id_chat: int) -> list:
+        with self.session() as session:
+            stmt = select(NickName).where(
+                NickName.id_chat == id_chat
+            )
+            result = session.execute(stmt)
+            return result.scalars().all()
+
     async def _get(self, id_chat: int, id_user: int) -> "NickName":
         """
         Функция получает пользователя из базы данных `new_nick`
@@ -159,6 +167,7 @@ class DNickName(ADataModel):
     async def add(self, id_user, id_chat, new_nick): await self._add(id_user, id_chat, new_nick)
     async def update(self, id_chat, id_user, new_nick): return await self._update(id_chat, id_user, new_nick)
     async def get(self, id_chat, id_user): return await self._get(id_chat, id_user)
+    async def get_more(self, id_chat): return await self._get_more(id_chat)
 
 class DInitedChat(ADataModel):
     def __init__(self, session):

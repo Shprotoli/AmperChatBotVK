@@ -1,14 +1,16 @@
 """ABCAmper.py - Файл предназначеный для абстрактных классов бота"""
 from abc import ABC, abstractmethod
-from typing import Union, Optional, Tuple
+from typing import Union, Optional, Tuple, List
 
 from vkbottle_types.responses.messages import MessagesGetConversationByIdExtended, MessagesGetConversationById
+from vkbottle_types.objects import UsersUserFull
 from vkbottle.bot import Message
 
 class AHandlerCommand(ABC):
     COMMAND = str # Команда для handler, например `help`
-    PREFIX = () # Префикс для команды, например `("/", ".")`
+    PREFIX = Tuple[str] # Префикс для команды, например `("/", ".")`
     ARGS = int # Количество аргументов, например `2`
+    SEP = str
 
     @abstractmethod
     def __init__(self, bot: "AApiVk"):
@@ -148,5 +150,14 @@ class AApiVk(ABC):
 
         :param peer_id: ID беседы
         :return `Tuple`: Возвращает картеж в котором хранятся данные о беседе
+        """
+        pass
+
+    async def get_info_user(self, user_id: int) -> List[UsersUserFull]:
+        """
+        Фунция для получения информации о пользователе
+
+        :param user_id: ID пользователя
+        :return `UsersUserFull`: Возвращает информацию о пользователе
         """
         pass
