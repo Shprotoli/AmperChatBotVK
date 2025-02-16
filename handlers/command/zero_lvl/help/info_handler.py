@@ -12,8 +12,7 @@ class CInfo(AHandlerCommand):
     COMMAND = "info"
     PREFIX = PREFIX_DEFAULT
     ARGS = 0
-
-    TEXT = "💭 Информация о данной беседе:\n\n"
+    SEP = None
 
     def __init__(self, api: "CApiVK"):
         self.api = api
@@ -33,18 +32,20 @@ class CInfo(AHandlerCommand):
         admin_count = len(chat_setting.admin_ids) + 1
         owner_chat = f"https://vk.com/id{chat_setting.owner_id}"
 
-        self.TEXT = "💭 Информация о данной беседе:\n\n"
-        self.TEXT += f"💬 Название беседы: {title}\n"
-        self.TEXT += f"🆔 ID чата: {id_chat}\n"
-        self.TEXT += f"👥 Пользователей в беседе: {user_count}\n"
-        self.TEXT += f"👤 Администраторов в беседе (со звездой): {admin_count}\n"
-        self.TEXT += f"🔗 Владелец беседы: {owner_chat}"
+        text = "💭 Информация о данной беседе:\n\n"
+        text += f"💬 Название беседы: {title}\n"
+        text += f"🆔 ID чата: {id_chat}\n"
+        text += f"👥 Пользователей в беседе: {user_count}\n"
+        text += f"👤 Администраторов в беседе (со звездой): {admin_count}\n"
+        text += f"🔗 Владелец беседы: {owner_chat}"
+
+        return text
 
     async def _realization_command(self, message, args=None) -> None:
         response = await self.api.get_info_chat(message.peer_id)
 
-        await self._get_setting_chat(response)
-        await message.answer(self.TEXT)
+        text = await self._get_setting_chat(response)
+        await message.answer(text)
 
     @checked_root_user(started_chat=True)
     async def realization_command(self, message, args=None) -> None: await self._realization_command(message, args)

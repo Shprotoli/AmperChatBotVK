@@ -9,6 +9,7 @@ class CSetLvl(AHandlerCommand):
     COMMAND = "setlvl"
     PREFIX = PREFIX_DEFAULT
     ARGS = 2
+    SEP = None
 
     def __init__(self, api: "CApiVK"):
         self.api = api

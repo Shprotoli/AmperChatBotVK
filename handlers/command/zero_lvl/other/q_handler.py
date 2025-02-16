@@ -10,6 +10,7 @@ class CQuit(AHandlerCommand):
     COMMAND = "q"
     PREFIX = PREFIX_DEFAULT
     ARGS = 0
+    SEP = None
 
     def __init__(self, api: "CApiVK"):
         self.api = api
