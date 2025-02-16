@@ -37,13 +37,13 @@ class CSetNick(AHandlerCommand):
         return True
 
     async def _small_len_nick_message(self, peer_id: int) -> None:
-        await self.api.send_message(peer_id, f"✉ Минимальная длинна ника - 3 символа")
+        await self.api.send_message(peer_id, f"⚠ Минимальная длинна ника - 3 символа")
 
     async def _big_len_nick_message(self, peer_id: int) -> None:
-        await self.api.send_message(peer_id, f"✉ Максимальная длинна ника - 60 символов")
+        await self.api.send_message(peer_id, f"⚠ Максимальная длинна ника - 60 символов")
 
     async def _add_nick_message(self, peer_id: int, id_user: int, id_request: int, nick_name: str) -> None:
-        await self.api.send_message(peer_id, f"✉ @id{id_request} (Пользователь) установили @id{id_user} (пользователю) ник - '{nick_name}'")
+        await self.api.send_message(peer_id, f"✉ @id{id_request} (Пользователь) установил @id{id_user} (пользователю) ник - '{nick_name}'")
 
     async def _set_nick_message(self, peer_id: int, id_user: int, id_request: int, nick_name: str) -> None:
         await self.api.send_message(peer_id, f"✉ @id{id_request} (Пользователь) обновил @id{id_user} (пользователю) ник на - '{nick_name}'")
@@ -68,5 +68,5 @@ class CSetNick(AHandlerCommand):
             await self._add_nick_message(peer_id, id_user, id_request_user, new_nick)
 
 
-    @checked_root_user(started_chat=True, lvl_admin_root=2)
+    @checked_root_user(started_chat=True, lvl_admin_root=1)
     async def realization_command(self, message, args=None) -> None: await self._realization_command(message, args)

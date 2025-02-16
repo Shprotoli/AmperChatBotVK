@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import create_engine, select, update
+from sqlalchemy import create_engine, select, update, delete
 from sqlalchemy.orm import sessionmaker
 
 from AmperChatBot.handlers.ABC.ABCAmperDataBase import ADataModel
@@ -111,6 +111,27 @@ class DNickName(ADataModel):
             session.add(new_column)
             session.commit()
 
+    async def _remove(self, id_user: int, id_chat: int) -> bool:
+        """
+        Функция для удаления ника пользователю
+
+        :param id_user: ID пользователя
+        :param id_chat: ID чата
+        :return: Возвращает `bool` тип в зависимости от ситуации
+                - `True`: Если был найден в таблице и удален
+                - `False`: Если не был найден в таблице и не был удален
+        """
+        with self.session() as session:
+            smrt = delete(NickName).where(
+                NickName.id_chat == id_chat,
+                NickName.id_user == id_user,
+            )
+
+            result = session.execute(smrt)
+            session.commit()
+
+            return True if result.rowcount else False
+
     async def _update(self, id_user: int, id_chat: int, new_nick: str) -> Optional["NickName"]:
         """
         Обновляет уровень администратора для пользователя в заданном чате.
@@ -167,6 +188,7 @@ class DNickName(ADataModel):
     async def add(self, id_user, id_chat, new_nick): await self._add(id_user, id_chat, new_nick)
     async def update(self, id_chat, id_user, new_nick): return await self._update(id_chat, id_user, new_nick)
     async def get(self, id_chat, id_user): return await self._get(id_chat, id_user)
+    async def remove(self, id_user, id_chat): return await self._remove(id_user, id_chat)
     async def get_more(self, id_chat): return await self._get_more(id_chat)
 
 class DInitedChat(ADataModel):

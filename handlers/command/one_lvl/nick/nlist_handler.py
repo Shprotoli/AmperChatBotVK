@@ -49,5 +49,5 @@ class CNickList(AHandlerCommand):
 
         await self.api.send_message(peer_id, text_return)
 
-    @checked_root_user(started_chat=True, lvl_admin_root=2)
+    @checked_root_user(started_chat=True, lvl_admin_root=1)
     async def realization_command(self, message, args=None) -> None: await self._realization_command(message, args)

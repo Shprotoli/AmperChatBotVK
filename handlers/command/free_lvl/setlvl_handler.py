@@ -38,16 +38,16 @@ class CSetLvl(AHandlerCommand):
         await self.api.send_message(peer_id, f"✉ @id{id_user} (Пользователю) успешно были выданы админ-права {admin_lvl_set} уровня")
 
     async def _error_add_admin_message(self, peer_id: int, id_user: int) -> None:
-        await self.api.send_message(peer_id, f"✉ @id{id_user} (Пользователь) не был найден в чате")
+        await self.api.send_message(peer_id, f"⛔ @id{id_user} (Пользователь) не был найден в чате")
 
     async def _lvl_admin_root_not_correct_message(self, peer_id: int) -> None:
-        await self.api.send_message(peer_id, f"✉ Уровень админ-прав не должен быть равен или превышать ваш")
+        await self.api.send_message(peer_id, f"⚠ Уровень админ-прав не должен быть равен или превышать ваш")
 
     async def _set_admin_root_message(self, peer_id: int, id_user: int, id_request: int, admin_lvl_set: int) -> None:
         await self.api.send_message(peer_id, f"✉ @id{id_request} (Пользователь) обновил @id{id_user} (пользователю) уровень админ-прав на {admin_lvl_set}")
 
     async def _not_correct_arg_message(self, peer_id: int) -> None:
-        await self.api.send_message(peer_id, f"✉ Вы неправильно передали аргументы.\n❓ Пользуйтесь формой: /setlvl user lvl")
+        await self.api.send_message(peer_id, f"⛔ Вы неправильно передали аргументы.\n❓ Пользуйтесь формой: /setlvl user lvl")
 
     async def _realization_command(self, message, args=None) -> None:
         peer_id = message.peer_id
