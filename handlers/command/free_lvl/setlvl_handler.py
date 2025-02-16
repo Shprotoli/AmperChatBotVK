@@ -37,22 +37,22 @@ class CSetLvl(AHandlerCommand):
         await self.bot.send_message(peer_id, f"✉ @id{id_user} (Пользователю) успешно были выданы админ-права {admin_lvl_set} уровня")
 
     async def _error_add_admin_message(self, peer_id: int, id_user: int) -> None:
-        await self.bot.send_message(peer_id, f"✉ @id{id_user} (Пользователь) не был найден")
+        await self.bot.send_message(peer_id, f"✉ @id{id_user} (Пользователь) не был найден в чате")
 
     async def _lvl_admin_root_not_correct_message(self, peer_id: int) -> None:
         await self.bot.send_message(peer_id, f"✉ Уровень админ-прав не должен быть равен или превышать ваш")
 
-    async def _set_admin_root_message(self, peer_id: int, id_user: int, admin_lvl_set: int) -> None:
-        await self.bot.send_message(peer_id, f"✉ Вы обновили @id{id_user} (пользователю) уровень админ-прав на {admin_lvl_set}")
+    async def _set_admin_root_message(self, peer_id: int, id_user: int, id_request: int, admin_lvl_set: int) -> None:
+        await self.bot.send_message(peer_id, f"✉ @id{id_request} (Пользователь) обновил @id{id_user} (пользователю) уровень админ-прав на {admin_lvl_set}")
 
     async def _not_correct_arg_message(self, peer_id: int) -> None:
-        await self.bot.send_message(peer_id, f"✉ Вы передали аргументы неправильно.\n❓ Пользуйтесь формой: /setlvl user lvl")
+        await self.bot.send_message(peer_id, f"✉ Вы неправильно передали аргументы.\n❓ Пользуйтесь формой: /setlvl user lvl")
 
     async def _realization_command(self, message, args=None) -> None:
         peer_id = message.peer_id
         chat_id = message.peer_id - 2000000000
         owner_id = await self.bot.get_creater_chat(peer_id)
-        request_id_user = message.from_id
+        id_request_user = message.from_id
 
         id_user = await self._get_id(args[0])
         try:
@@ -61,7 +61,7 @@ class CSetLvl(AHandlerCommand):
             await self._not_correct_arg_message(peer_id)
             return
 
-        if not await self._check_set_admin_root(owner_id, request_id_user, set_lvl_admin, peer_id):
+        if not await self._check_set_admin_root(owner_id, id_request_user, set_lvl_admin, peer_id):
             return
 
         if id_user:
@@ -69,7 +69,7 @@ class CSetLvl(AHandlerCommand):
 
             if check_user_in_db:
                 await self.db.update_lvl_admin(id_user, chat_id, set_lvl_admin)
-                await self._set_admin_root_message(peer_id, id_user, set_lvl_admin)
+                await self._set_admin_root_message(peer_id, id_user, id_request_user, set_lvl_admin)
             else:
                 await self.db.add(id_user, chat_id, set_lvl_admin)
                 await self._add_admin_message(peer_id, id_user, set_lvl_admin)

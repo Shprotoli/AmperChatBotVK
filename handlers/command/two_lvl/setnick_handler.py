@@ -17,7 +17,7 @@ class CSetNick(AHandlerCommand):
         self.db = DAmperMySQL().nick_name_db
 
     async def _get_id(self, user_info: str) -> int:
-        if "|" in user_info: return int(user_info.split("|")[0].replace("[id", ""))
+        if "|" in user_info: return int(user_info.split("|")[0].replace("id", ""))
 
     async def _check_len_new_nick(self, new_nick: str, peer_id: int) -> bool:
         """
@@ -43,15 +43,16 @@ class CSetNick(AHandlerCommand):
     async def _big_len_nick_message(self, peer_id: int) -> None:
         await self.bot.send_message(peer_id, f"✉ Максимальная длинна ника - 60 символов")
 
-    async def _add_nick_message(self, peer_id: int, id_user: int, nick_name: str) -> None:
-        await self.bot.send_message(peer_id, f"✉ Вы установили @id{id_user} (пользователю) ник - '{nick_name}'")
+    async def _add_nick_message(self, peer_id: int, id_user: int, id_request: int, nick_name: str) -> None:
+        await self.bot.send_message(peer_id, f"✉ @id{id_request} (Пользователь) установили @id{id_user} (пользователю) ник - '{nick_name}'")
 
-    async def _set_nick_message(self, peer_id: int, id_user: int, nick_name: str) -> None:
-        await self.bot.send_message(peer_id, f"✉ Вы обновили @id{id_user} (пользователю) ник на - '{nick_name}'")
+    async def _set_nick_message(self, peer_id: int, id_user: int, id_request: int, nick_name: str) -> None:
+        await self.bot.send_message(peer_id, f"✉ @id{id_request} (Пользователь) обновил @id{id_user} (пользователю) ник на - '{nick_name}'")
 
     async def _realization_command(self, message, args=None) -> None:
         peer_id = message.peer_id
         id_chat = message.peer_id - 2000000000
+        id_request_user = message.from_id
 
         id_user = await self._get_id(args[0])
         new_nick = args[1]
@@ -62,10 +63,10 @@ class CSetNick(AHandlerCommand):
         check_user_in_db = await self.db.get(id_chat, id_user)
         if check_user_in_db:
             await self.db.update(id_user, id_chat, new_nick)
-            await self._set_nick_message(peer_id, id_user, new_nick)
+            await self._set_nick_message(peer_id, id_user, id_request_user,  new_nick)
         else:
             await self.db.add(id_user, id_chat, new_nick)
-            await self._add_nick_message(peer_id, id_user, new_nick)
+            await self._add_nick_message(peer_id, id_user, id_request_user, new_nick)
 
 
     @checked_root_user(started_chat=True, lvl_admin_root=2)

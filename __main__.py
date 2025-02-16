@@ -59,7 +59,7 @@ class AmperBotInit(Bot):
         labeler.chat_message(CommandRule(info_ekz.COMMAND, info_ekz.PREFIX, info_ekz.ARGS))(info_ekz.realization_command)
         labeler.chat_message(CommandRule(quit_ekz.COMMAND, quit_ekz.PREFIX, quit_ekz.ARGS))(quit_ekz.realization_command)
         labeler.chat_message(CommandRule(set_lvl_ekz.COMMAND, set_lvl_ekz.PREFIX, set_lvl_ekz.ARGS))(set_lvl_ekz.realization_command)
-        labeler.chat_message(CommandRule(set_nick_ekz.COMMAND, set_nick_ekz.PREFIX, set_nick_ekz.ARGS))(set_nick_ekz.realization_command)
+        labeler.chat_message(CommandRule(set_nick_ekz.COMMAND, set_nick_ekz.PREFIX, set_nick_ekz.ARGS, sep="] "))(set_nick_ekz.realization_command)
 
 if __name__ == "__main__":
     bot = AmperBotInit(token)
