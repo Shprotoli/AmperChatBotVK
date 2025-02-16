@@ -15,8 +15,8 @@ class CInfo(AHandlerCommand):
 
     TEXT = "💭 Информация о данной беседе:\n\n"
 
-    def __init__(self, bot: "CApiVK"):
-        self.bot = bot
+    def __init__(self, api: "CApiVK"):
+        self.api = api
 
     async def _get_setting_chat(self, response: Union[MessagesGetConversationByIdExtended, MessagesGetConversationById]) -> None:
         """
@@ -41,7 +41,7 @@ class CInfo(AHandlerCommand):
         self.TEXT += f"🔗 Владелец беседы: {owner_chat}"
 
     async def _realization_command(self, message, args=None) -> None:
-        response = await self.bot.get_info_chat(message.peer_id)
+        response = await self.api.get_info_chat(message.peer_id)
 
         await self._get_setting_chat(response)
         await message.answer(self.TEXT)

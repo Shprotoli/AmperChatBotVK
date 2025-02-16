@@ -43,7 +43,8 @@ async def get_lvl_setting(lvl: int) -> tuple:
             text_lvl = (
                 "📒 В этом разделе вы можете посмотреть все доступные команды на разных уровнях админ-прав.\n\n"
                 "⚡ Команды для пользователя 2 уровня админ-прав:\n\n"
-                "/setnick - Установить ник"
+                "/setnick - Установить ник\n"
+                "/nlist - Список пользователей с никами\n"
             )
         case 3:
             text_lvl = (
@@ -152,8 +153,8 @@ class CHelp(AHandlerCommand):
     PREFIX = PREFIX_DEFAULT
     ARGS = 0
 
-    def __init__(self, bot: CApiVK):
-        self.bot = bot
+    def __init__(self, api: CApiVK):
+        self.api = api
 
     async def _realization_command(self, message, args=None) -> None:
         text_lvl, keyboard = await get_lvl_setting(0)

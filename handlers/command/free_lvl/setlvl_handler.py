@@ -10,8 +10,8 @@ class CSetLvl(AHandlerCommand):
     PREFIX = PREFIX_DEFAULT
     ARGS = 2
 
-    def __init__(self, bot: "CApiVK"):
-        self.bot = bot
+    def __init__(self, api: "CApiVK"):
+        self.api = api
         self.db = DAmperMySQL().lvl_admin_root
 
     async def _get_id(self, user_info: str) -> int:
@@ -34,24 +34,24 @@ class CSetLvl(AHandlerCommand):
         return True
 
     async def _add_admin_message(self, peer_id: int, id_user: int, admin_lvl_set: int) -> None:
-        await self.bot.send_message(peer_id, f"✉ @id{id_user} (Пользователю) успешно были выданы админ-права {admin_lvl_set} уровня")
+        await self.api.send_message(peer_id, f"✉ @id{id_user} (Пользователю) успешно были выданы админ-права {admin_lvl_set} уровня")
 
     async def _error_add_admin_message(self, peer_id: int, id_user: int) -> None:
-        await self.bot.send_message(peer_id, f"✉ @id{id_user} (Пользователь) не был найден в чате")
+        await self.api.send_message(peer_id, f"✉ @id{id_user} (Пользователь) не был найден в чате")
 
     async def _lvl_admin_root_not_correct_message(self, peer_id: int) -> None:
-        await self.bot.send_message(peer_id, f"✉ Уровень админ-прав не должен быть равен или превышать ваш")
+        await self.api.send_message(peer_id, f"✉ Уровень админ-прав не должен быть равен или превышать ваш")
 
     async def _set_admin_root_message(self, peer_id: int, id_user: int, id_request: int, admin_lvl_set: int) -> None:
-        await self.bot.send_message(peer_id, f"✉ @id{id_request} (Пользователь) обновил @id{id_user} (пользователю) уровень админ-прав на {admin_lvl_set}")
+        await self.api.send_message(peer_id, f"✉ @id{id_request} (Пользователь) обновил @id{id_user} (пользователю) уровень админ-прав на {admin_lvl_set}")
 
     async def _not_correct_arg_message(self, peer_id: int) -> None:
-        await self.bot.send_message(peer_id, f"✉ Вы неправильно передали аргументы.\n❓ Пользуйтесь формой: /setlvl user lvl")
+        await self.api.send_message(peer_id, f"✉ Вы неправильно передали аргументы.\n❓ Пользуйтесь формой: /setlvl user lvl")
 
     async def _realization_command(self, message, args=None) -> None:
         peer_id = message.peer_id
         chat_id = message.peer_id - 2000000000
-        owner_id = await self.bot.get_creater_chat(peer_id)
+        owner_id = await self.api.get_creater_chat(peer_id)
         id_request_user = message.from_id
 
         id_user = await self._get_id(args[0])

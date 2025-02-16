@@ -4,7 +4,7 @@ from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 def checked_root_user(started_chat: bool = True, lvl_admin_root: int = False):
     def decorator(func):
         async def wrapper(self, message, args=None, *arg, **kwargs):
-            api = self.bot
+            api = self.api
             message_dict = message.dict()
 
             peer_id = message_dict.get("peer_id")

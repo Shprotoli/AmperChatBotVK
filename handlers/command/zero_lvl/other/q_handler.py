@@ -11,16 +11,16 @@ class CQuit(AHandlerCommand):
     PREFIX = PREFIX_DEFAULT
     ARGS = 0
 
-    def __init__(self, bot: "CApiVK"):
-        self.bot = bot
-        self.punishment = bot.punishment
+    def __init__(self, api: "CApiVK"):
+        self.api = api
+        self.punishment = api.punishment
 
     async def _user_admin_chat(self, peer_id: int, user_id: int):
-        await self.bot.send_message(peer_id, f"⛔ Я не могу кикнуть @id{user_id} (тебя), "
+        await self.api.send_message(peer_id, f"⛔ Я не могу кикнуть @id{user_id} (тебя), "
                                              f"потому что ты являешься администратором данной беседы.")
 
     async def _user_kick(self, peer_id: int, user_id: int):
-        await self.bot.send_message(peer_id, f"👀 @id{user_id} (Пользователь) покидает эту вечеринку.")
+        await self.api.send_message(peer_id, f"👀 @id{user_id} (Пользователь) покидает эту вечеринку.")
 
     async def _realization_command(self, message, args=None) -> None:
         message_dict = message.dict()
