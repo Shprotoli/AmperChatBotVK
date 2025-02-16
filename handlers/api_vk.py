@@ -68,6 +68,9 @@ class CApiVK(AApiVk):
     async def _get_info_chat(self, peer_id):
         return await self.bot.api.messages.get_conversations_by_id(peer_ids=peer_id)
 
+    async def _get_info_user(self, user_id):
+        return await self.bot.api.users.get(user_ids=user_id, fields=["first_name", "last_name"])
+
 
     @property
     def punishment(self) -> "CPunishmentApiVK": return self._punishment
@@ -80,3 +83,4 @@ class CApiVK(AApiVk):
     async def send_notif(self, peer_id, event_id, user_id, message): await self._send_notif(peer_id, event_id, user_id, message)
     async def send_message(self, peer_id, message_text): await self._send_message(peer_id, message_text)
     async def get_info_chat(self, peer_id): return await self._get_info_chat(peer_id)
+    async def get_info_user(self, user_id): return await self._get_info_user(user_id)
