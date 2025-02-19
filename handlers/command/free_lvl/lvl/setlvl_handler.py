@@ -27,7 +27,11 @@ class CSetLvl(AHandlerCommand):
         :param request_id_user: ID пользователя, который написал команду
         :param set_lvl_admin: Уровень, который хотим установить
         :param peer_id: ID чата
-        :return:
+        :return: Возвращает `bool` в зависимости от ситуации:
+                - `False`: Если пользователь, который удаляет (request_id_user) не является владельцем чата (owner_id)
+                          и мы устанавливаем 3 уровень админ-прав или устанавливаемый уровень админ-прав (set_lvl_admin)
+                          превышает 4 или меньше 1
+                - `True`: В остальных случаях
         """
         if owner_id != request_id_user and set_lvl_admin == 3 or set_lvl_admin >= 4 or set_lvl_admin < 1:
             await self._lvl_admin_root_not_correct_message(peer_id)
