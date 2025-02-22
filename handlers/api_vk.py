@@ -10,11 +10,23 @@ class CPunishmentApiVK:
     def __init__(self, bot: "Bot"):
         self.bot = bot
 
-    async def _kick(self, chat_id, user_id) -> None:
+    async def _kick(self, chat_id: int, user_id: int) -> None:
         await self.bot.api.messages.remove_chat_user(chat_id, user_id)
+
+    async def _mute(self, peer_id: int, user_id: int, min: int) -> None:
+        await self.bot.api.request(
+            "messages.changeConversationMemberRestrictions",
+            {
+                "peer_id": peer_id,
+                "member_ids": user_id,
+                "for": min * 60,
+                "action": "ro"
+            }
+        )
 
 
     async def kick(self, chat_id, user_id) -> None: await self._kick(chat_id, user_id)
+    async def mute(self, peer_id, user_id, min) -> None: await self._mute(peer_id, user_id, min)
 
 class CApiVK(AApiVk):
     def __init__(self, bot: Bot):
