@@ -1,3 +1,4 @@
+"""amper_mysql.py - файл для хранения классов, через которые будет осуществляться взаимодействие с моделями"""
 from typing import Optional
 
 from sqlalchemy import create_engine, select, update, delete
@@ -9,7 +10,31 @@ from AmperChatBot.handlers.DB.Models import (
     InitedChat,
     LvlAdminRoot,
     NickName,
+    Mute,
 )
+
+class DMute(ADataModel):
+    def __init__(self, session):
+        self.session = session
+
+    async def _add(self, id_user: int, id_chat: int, min: int) -> None:
+        with self.session() as session:
+            stmt = Mute(id_user=id_user, id_chat=id_chat, min=min)
+            session.add(stmt)
+            session.commit()
+
+    async def _get(self, id_user: int, id_chat: int) -> Optional["Mute"]:
+        with self.session() as session:
+            stmt = select(Mute).where(
+                (Mute.id_user == id_user) &
+                (Mute.id_chat == id_chat)
+            )
+            result = session.execute(stmt)
+            mute = result.scalar_one_or_none()
+            return mute
+
+    async def get(self, id_user, id_chat): return await self._get(id_user, id_chat)
+    async def add(self, id_user, id_chat, min): await self._add(id_user, id_chat, min)
 
 class DLvlAdminRoot(ADataModel):
     def __init__(self, session):
@@ -101,6 +126,15 @@ class DLvlAdminRoot(ADataModel):
             return admin_record
 
     async def _get(self, id_user: int, id_chat: int) -> Optional["LvlAdminRoot"]:
+        """
+        Возвращает пользователя по заданным параметрам из базы `lvl_admin_root`
+
+        :param id_user: ID пользователя
+        :param id_chat: ID чата
+        :return: Возвращает значение в зависимости от ситуации:
+                - `None`: Если пользователь не найден
+                - `LvlAdminRoot`: Если пользователь найден
+        """
         with self.session() as session:
             stmt = select(LvlAdminRoot).where(
                 (LvlAdminRoot.id_user == id_user) &
@@ -264,6 +298,7 @@ class DAmperMySQL:
         self._inited_chat_db = DInitedChat(self.session)
         self._lvl_admin_root_db = DLvlAdminRoot(self.session)
         self._nick_name_db = DNickName(self.session)
+        self._mute_db = DMute(self.session)
 
     @property
     def inited_chat_db(self): return self._inited_chat_db
@@ -273,6 +308,9 @@ class DAmperMySQL:
 
     @property
     def nick_name_db(self): return self._nick_name_db
+
+    @property
+    def mute_db(self): return self._mute_db
 
 
     def init_database(self) -> None:

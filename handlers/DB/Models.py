@@ -1,3 +1,4 @@
+"""Models.py - файл для хранения моделей MySQL"""
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import declarative_base
 
@@ -27,3 +28,12 @@ class NickName(BASE):
     id_user = Column(Integer, nullable=False)
     id_chat = Column(Integer, nullable=False)
     nick = Column(String(length=60), nullable=False)
+
+class Mute(BASE):
+    """Модель для хранения пользователей с мутом"""
+    __tablename__ = "mute"
+
+    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    id_user = Column(Integer, nullable=False)
+    id_chat = Column(Integer, nullable=False)
+    min = Column(Integer, nullable=False)
