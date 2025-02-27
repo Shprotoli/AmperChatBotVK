@@ -153,11 +153,22 @@ class AApiVk(ABC):
         """
         pass
 
+    @abstractmethod
     async def get_info_user(self, user_id: int) -> List[UsersUserFull]:
         """
         Фунция для получения информации о пользователе
 
         :param user_id: ID пользователя
         :return `UsersUserFull`: Возвращает информацию о пользователе
+        """
+        pass
+
+    @abstractmethod
+    async def get_users_online(self, peer_id: int) -> List[int]:
+        """
+        Функция для получения списка пользователей онлайн
+
+        :param peer_id: ID группы
+        :return:
         """
         pass

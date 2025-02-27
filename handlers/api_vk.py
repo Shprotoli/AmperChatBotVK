@@ -94,12 +94,25 @@ class CApiVK(AApiVk):
     async def _get_info_user(self, user_id):
         return await self.bot.api.users.get(user_ids=user_id, fields=["first_name", "last_name"])
 
+    async def _get_users_online(self, peer_id):
+        conversation_members = await self.bot.api.messages.get_conversation_members(peer_id=peer_id)
+
+        profiles = conversation_members.profiles
+
+        online_user_ids = [
+            profile.id
+            for profile in profiles
+            if profile.online_info.is_online
+        ]
+
+        return online_user_ids
 
     @property
     def punishment(self) -> "CPunishmentApiVK": return self._punishment
 
 
     async def get_creater_chat(self, peer_id): return await self._get_creater_chat(peer_id)
+    async def get_users_online(self, peer_id): return await self._get_users_online(peer_id)
     async def is_creater_chat(self, id_user, peer_id): return id_user == await self._get_creater_chat(peer_id)
     async def bot_is_admin_in_chat(self, peer_id): return await self._bot_is_admin_in_chat(peer_id)
     async def edit_message_chat(self, peer_id, conversation_message_id, message, keyboard=None): await self._edit_message_chat(peer_id, conversation_message_id, message, keyboard)
