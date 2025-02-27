@@ -1,4 +1,4 @@
-"""unmute_handler.py - файл для реализации снятия мута"""
+"""unmute_handler.py - Файл для реализации снятия мута"""
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT

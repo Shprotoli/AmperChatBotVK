@@ -1,3 +1,4 @@
+"""info_handler.py - Файл для команды `/help`"""
 from typing import Union
 
 from vkbottle_types.responses.messages import MessagesGetConversationByIdExtended, MessagesGetConversationById

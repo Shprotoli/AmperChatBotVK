@@ -1,3 +1,4 @@
+"""rnick_handler.py - Файл для команды с удалением ника у пользователя"""
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT

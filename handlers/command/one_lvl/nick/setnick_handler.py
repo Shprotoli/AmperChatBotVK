@@ -1,3 +1,4 @@
+"""setnick_handler.py - Файл для установки ника пользователю"""
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT
