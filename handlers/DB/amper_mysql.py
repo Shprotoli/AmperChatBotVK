@@ -125,6 +125,26 @@ class DLvlAdminRoot(ADataModel):
 
             return admin_record
 
+    async def _get_more(self, id_chat: int, lvl_admin_root: int) -> Optional["LvlAdminRoot"]:
+        """
+        Возвращает пользователей из выбранного чата с выбранным уровнем или больше
+
+        :param lvl_admin_root: Уровень админ прав
+        :param id_chat: ID чата
+        :return: Возвращает значение в зависимости от ситуации:
+                - `None`: Если пользователей не найдено
+                - `LvlAdminRoot`: Если хотя бы один пользователь найден
+        """
+        with self.session() as session:
+            stmt = select(LvlAdminRoot).where(
+                (LvlAdminRoot.id_chat == id_chat) &
+                (LvlAdminRoot.lvl_admin_root >= lvl_admin_root)
+            )
+            result = session.execute(stmt)
+            admin_record = result.scalars().all()
+
+            return admin_record
+
     async def _get(self, id_user: int, id_chat: int) -> Optional["LvlAdminRoot"]:
         """
         Возвращает пользователя по заданным параметрам из базы `lvl_admin_root`
@@ -147,6 +167,7 @@ class DLvlAdminRoot(ADataModel):
 
     async def add(self, id_user: int, id_chat: int, lvl_admin_root: int) -> None: await self._add(id_user, id_chat, lvl_admin_root)
     async def get_mr(self, id_user: int, id_chat: int, lvl_admin_root: int) -> Optional["LvlAdminRoot"]: return await self._get_mr(id_user, id_chat, lvl_admin_root)
+    async def get_more(self, id_chat: int, lvl_admin_root: int) -> list["LvlAdminRoot"]: return await self._get_more(id_chat, lvl_admin_root)
     async def get(self, id_user: int, id_chat: int) -> Optional["LvlAdminRoot"]: return await self._get(id_user, id_chat)
     async def update_lvl_admin(self, id_user: int, id_chat: int, lvl: int) -> Optional["LvlAdminRoot"]: await self._update_lvl_admin(id_user, id_chat, lvl)
     async def remove(self, id_user: int, id_chat: int) -> bool: return await self._remove(id_user, id_chat)

@@ -16,10 +16,11 @@ from AmperChatBot.handlers.command.zero_lvl.help.help_handler import CHelp
 from AmperChatBot.handlers.command.zero_lvl.help.info_handler import CInfo
 from AmperChatBot.handlers.command.zero_lvl.other.random_handler import CRandom
 from AmperChatBot.handlers.command.zero_lvl.other.q_handler import CQuit
-from AmperChatBot.handlers.command.one_lvl.nick.setnick_handler import CSetNick
-from AmperChatBot.handlers.command.one_lvl.nick.nlist_handler import CNickList
-from AmperChatBot.handlers.command.one_lvl.nick.rnick_handler import CRemoveNick
+from AmperChatBot.handlers.command.one_lvl.nick_users.setnick_handler import CSetNick
+from AmperChatBot.handlers.command.one_lvl.nick_users.nlist_handler import CNickList
+from AmperChatBot.handlers.command.one_lvl.nick_users.rnick_handler import CRemoveNick
 from AmperChatBot.handlers.command.one_lvl.online_users.olist_handler import COnlineList
+from AmperChatBot.handlers.command.one_lvl.staff_users.staff_handler import CStaffList
 from AmperChatBot.handlers.command.two_lvl.mute.mute_handler import CMute
 from AmperChatBot.handlers.command.two_lvl.mute.unmute_handler import CUnMute
 from AmperChatBot.handlers.command.free_lvl.lvl.setlvl_handler import CSetLvl
@@ -67,14 +68,13 @@ class AmperBotInit(Bot):
             CRandom(self.api_vk_ekz),
             CMute(self.api_vk_ekz),
             CUnMute(self.api_vk_ekz),
-            COnlineList(self.api_vk_ekz)
+            COnlineList(self.api_vk_ekz),
+            CStaffList(self.api_vk_ekz),
         )
 
         for command in commands:
-            if not command.SEP:
-                SEP = " "
-            else:
-                SEP = command.SEP
+            if not command.SEP: SEP = " "
+            else: SEP = command.SEP
 
             labeler.chat_message(CommandRule(command.COMMAND, command.PREFIX, command.ARGS, SEP))(command.realization_command)
 
