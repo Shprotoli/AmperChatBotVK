@@ -48,6 +48,9 @@ class CSetLvl(AHandlerCommand):
     async def _lvl_admin_root_not_correct_message(self, peer_id: int) -> None:
         await self.api.send_message(peer_id, f"⚠ Уровень админ-прав не должен быть равен или превышать ваш")
 
+    async def _set_root_yourself(self, peer_id: int) -> None:
+        await self.api.send_message(peer_id, f"⚠ Вы пытаетесь установить админ-права сами себе")
+
     async def _set_admin_root_message(self, peer_id: int, id_user: int, id_request: int, admin_lvl_set: int) -> None:
         await self.api.send_message(peer_id, f"✉ @id{id_request} (Пользователь) обновил @id{id_user} (пользователю) уровень админ-прав на {admin_lvl_set}")
 
@@ -68,6 +71,10 @@ class CSetLvl(AHandlerCommand):
             return
 
         if not await self._check_set_admin_root(owner_id, id_request_user, set_lvl_admin, peer_id):
+            return
+
+        if id_request_user == id_user:
+            await self._set_root_yourself(peer_id)
             return
 
         if id_user:

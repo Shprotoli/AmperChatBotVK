@@ -28,6 +28,9 @@ class CDeleteLevel(AHandlerCommand):
     async def _not_access_for_del_message(self, peer_id: int) -> None:
         await self.api.send_message(peer_id, f"⛔ У вас недостаточно админ-прав для удаления админ-прав у данного пользователя")
 
+    async def _delete_root_yourself(self, peer_id: int) -> None:
+        await self.api.send_message(peer_id, f"⚠ Вы пытаетесь снять админ-права сами себе")
+
     async def _check_lvl(self, id_request: int, id_user: int, id_chat: int) -> bool:
         """
         Функция для проверки того, что уровень админ-прав пользователя,
@@ -58,9 +61,13 @@ class CDeleteLevel(AHandlerCommand):
         id_user = await self._get_id(args[0])
         id_chat = message.chat_id
         peer_id = message.peer_id
-        request_user_id = message.from_id
+        id_request_user = message.from_id
 
-        if await self._check_lvl(request_user_id, id_user, id_chat):
+        if id_request_user == id_user:
+            await self._delete_root_yourself(peer_id)
+            return
+
+        if await self._check_lvl(id_request_user, id_user, id_chat):
             result_db_remove = await self.db.remove(id_user, id_chat)
 
             if result_db_remove:
