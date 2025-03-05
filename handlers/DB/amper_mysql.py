@@ -179,9 +179,6 @@ class DNickName(ADataModel):
     async def _add(self, id_user: int, id_chat: int, new_nick: str) -> None:
         """
         Добавляет новый ник для пользователя в чате в базу данных `new_nick`
-
-        :param id_chat: ID чата для добавления
-        :return: None
         """
         with self.session() as session:
             new_column = NickName(id_user=id_user, id_chat=id_chat, nick=new_nick)
@@ -240,6 +237,7 @@ class DNickName(ADataModel):
                 return admin_record
 
     async def _get_more(self, id_chat: int) -> list:
+        """Функция для получения всех пользователей с никами в выбранном чате"""
         with self.session() as session:
             stmt = select(NickName).where(
                 NickName.id_chat == id_chat
@@ -250,9 +248,6 @@ class DNickName(ADataModel):
     async def _get(self, id_chat: int, id_user: int) -> "NickName":
         """
         Функция получает пользователя из базы данных `new_nick`
-
-        :param id_chat: ID чата для получения
-        :return: None
         """
         with self.session() as session:
             stmt = select(NickName).where(
@@ -275,9 +270,6 @@ class DInitedChat(ADataModel):
     async def _add(self, id_chat: int) -> None:
         """
         Добавляет новый чат в базу данных `inited_chat`
-
-        :param id_chat: ID чата для добавления
-        :return: None
         """
         with self.session() as session:
             new_chat = InitedChat(id_chat=id_chat)
@@ -287,9 +279,6 @@ class DInitedChat(ADataModel):
     async def _get(self, id_peer: int) -> "InitedChat":
         """
         Функция получает чат из базы данных `inited_chat`
-
-        :param id_chat: ID чата для получения
-        :return: None
         """
         with self.session() as session:
             stmt = select(InitedChat).where(InitedChat.id_chat == id_peer)
@@ -337,8 +326,6 @@ class DAmperMySQL:
     def init_database(self) -> None:
         """
         Функция для инициализации баз данных
-
-        :return: None
         """
         with self.engine.begin() as conn:
             self.Base.metadata.create_all(conn)

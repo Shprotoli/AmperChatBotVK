@@ -21,9 +21,6 @@ class COnlineList(AHandlerCommand):
     async def _get_name_user(self, id_user: int) -> str:
         """
         Функция, которая возвращает полное имя пользователя (`first_name` + `last_name`)
-
-        :param id_user: ID пользователя
-        :return:
         """
         info_about_user = await self.api.get_info_user(id_user)
         info_about_user_dict = info_about_user[0].dict()
