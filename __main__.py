@@ -21,6 +21,7 @@ from AmperChatBot.handlers.command.one_lvl.nick_users.nlist_handler import CNick
 from AmperChatBot.handlers.command.one_lvl.nick_users.rnick_handler import CRemoveNick
 from AmperChatBot.handlers.command.one_lvl.online_users.olist_handler import COnlineList
 from AmperChatBot.handlers.command.one_lvl.staff_users.staff_handler import CStaffList
+from AmperChatBot.handlers.command.one_lvl.nick_users.getnick_handler import CGetNick
 from AmperChatBot.handlers.command.two_lvl.mute.mute_handler import CMute
 from AmperChatBot.handlers.command.two_lvl.mute.unmute_handler import CUnMute
 from AmperChatBot.handlers.command.free_lvl.lvl.setlvl_handler import CSetLvl
@@ -70,6 +71,7 @@ class AmperBotInit(Bot):
             CUnMute(self.api_vk_ekz),
             COnlineList(self.api_vk_ekz),
             CStaffList(self.api_vk_ekz),
+            CGetNick(self.api_vk_ekz),
         )
 
         for command in commands:
