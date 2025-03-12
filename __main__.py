@@ -26,6 +26,7 @@ from AmperChatBot.handlers.command.two_lvl.mute.mute_handler import CMute
 from AmperChatBot.handlers.command.two_lvl.mute.unmute_handler import CUnMute
 from AmperChatBot.handlers.command.free_lvl.lvl.setlvl_handler import CSetLvl
 from AmperChatBot.handlers.command.free_lvl.lvl.dellvl_handler import CDeleteLevel
+from AmperChatBot.handlers.command.free_lvl.kick.kick_handler import CKick
 # DataBase
 from handlers.DB.amper_mysql import DAmperMySQL
 
@@ -72,6 +73,7 @@ class AmperBotInit(Bot):
             COnlineList(self.api_vk_ekz),
             CStaffList(self.api_vk_ekz),
             CGetNick(self.api_vk_ekz),
+            CKick(self.api_vk_ekz),
         )
 
         for command in commands:
