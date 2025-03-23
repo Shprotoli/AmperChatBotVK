@@ -23,6 +23,16 @@ class DMute(ADataModel):
             session.add(stmt)
             session.commit()
 
+    async def _get_all(self, id_chat: int) -> list[Optional["Mute"]]:
+        with self.session() as session:
+            stmt = select(Mute).where(
+                (Mute.id_chat == id_chat)
+            )
+            result = session.execute(stmt)
+            mute_users = result.all()
+
+            return mute_users
+
     async def _get(self, id_user: int, id_chat: int) -> Optional["Mute"]:
         with self.session() as session:
             stmt = select(Mute).where(
@@ -34,6 +44,7 @@ class DMute(ADataModel):
             return mute
 
     async def get(self, id_user, id_chat): return await self._get(id_user, id_chat)
+    async def get_all(self, id_chat): return await self._get_all(id_chat)
     async def add(self, id_user, id_chat, min): await self._add(id_user, id_chat, min)
 
 class DLvlAdminRoot(ADataModel):
@@ -165,12 +176,31 @@ class DLvlAdminRoot(ADataModel):
 
             return admin_record
 
+    async def _clear(self, id_chat: int) -> None:
+        """
+        Очищает всю информацию о уровнях администрации в указанном чате (id_chat)
+
+        :param id_chat: ID чата
+        :return: None
+        """
+        with self.session() as session:
+            stmt = select(LvlAdminRoot).where(
+                (LvlAdminRoot.id_chat == id_chat)
+            )
+            result = session.execute(stmt)
+            for obj in result.scalars().all():
+                session.delete(obj)
+
+            session.commit()
+
+
     async def add(self, id_user: int, id_chat: int, lvl_admin_root: int) -> None: await self._add(id_user, id_chat, lvl_admin_root)
     async def get_mr(self, id_user: int, id_chat: int, lvl_admin_root: int) -> Optional["LvlAdminRoot"]: return await self._get_mr(id_user, id_chat, lvl_admin_root)
     async def get_more(self, id_chat: int, lvl_admin_root: int) -> list["LvlAdminRoot"]: return await self._get_more(id_chat, lvl_admin_root)
     async def get(self, id_user: int, id_chat: int) -> Optional["LvlAdminRoot"]: return await self._get(id_user, id_chat)
     async def update_lvl_admin(self, id_user: int, id_chat: int, lvl: int) -> Optional["LvlAdminRoot"]: await self._update_lvl_admin(id_user, id_chat, lvl)
     async def remove(self, id_user: int, id_chat: int) -> bool: return await self._remove(id_user, id_chat)
+    async def clear(self, id_chat: int) -> bool: return await self._clear(id_chat)
 
 class DNickName(ADataModel):
     def __init__(self, session):
@@ -257,10 +287,28 @@ class DNickName(ADataModel):
             result = session.execute(stmt)
             return result.scalars().first()
 
+    async def _clear(self, id_chat: int) -> None:
+        """
+        Очищает всю информацию о никах в указанном чате (id_chat)
+
+        :param id_chat: ID чата
+        :return: None
+        """
+        with self.session() as session:
+            stmt = select(NickName).where(
+                (NickName.id_chat == id_chat)
+            )
+            result = session.execute(stmt)
+            for obj in result.scalars().all():
+                session.delete(obj)
+
+            session.commit()
+
     async def add(self, id_user, id_chat, new_nick): await self._add(id_user, id_chat, new_nick)
     async def update(self, id_chat, id_user, new_nick): return await self._update(id_chat, id_user, new_nick)
     async def get(self, id_chat, id_user): return await self._get(id_chat, id_user)
     async def remove(self, id_user, id_chat): return await self._remove(id_user, id_chat)
+    async def clear(self, id_chat): return await self._clear(id_chat)
     async def get_more(self, id_chat): return await self._get_more(id_chat)
 
 class DInitedChat(ADataModel):
@@ -286,7 +334,7 @@ class DInitedChat(ADataModel):
             return result.scalars().first()
 
     async def add(self, id_chat): await self._add(id_chat)
-    async def get(self, id_peer): return await self._get(id_peer)
+    async def get(self, peer_id): return await self._get(peer_id)
 
 
 class DAmperMySQL:

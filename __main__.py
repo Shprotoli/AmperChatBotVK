@@ -50,7 +50,7 @@ class AmperBotInit(Bot):
         self.db.init_database()
 
     def _register_handlers(self) -> None:
-        join_group_ekz = CJoinGroup()
+        join_group_ekz = CJoinGroup(self.db.inited_chat_db)
         callback_handler_ekz = CCallbackHandler(self, self.api_vk_ekz, self.db)
 
         """Инициализация обработчиков бота"""

@@ -4,7 +4,7 @@ from typing import Any
 
 from vkbottle.bot import Bot
 
-from AmperChatBot.handlers.callback.start.welcome_callback import CStartBot
+from AmperChatBot.handlers.callback.start.welcome_callback import CStartBot, CContinueBot, CRestartBot
 from AmperChatBot.handlers.command.zero_lvl.help.help_handler import CLvlInformation
 from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 
@@ -16,6 +16,8 @@ class CCallbackHandler:
         self.api_vk_ekz = api_vk_class
 
         self.start_bot_ekz = CStartBot(self.db.inited_chat_db)
+        self.continue_bot_ekz = CContinueBot(self.db.inited_chat_db)
+        self.restart_bot_ekz = CRestartBot(self.db)
 
     async def _callback_handler(self, event: dict[str, Any]):
         callback = event['object']
@@ -24,6 +26,10 @@ class CCallbackHandler:
         match type_callback:
             case "start_bot_chat":
                 await self.start_bot_ekz.realization_callback(callback, self.api_vk_ekz)
+            case "continue_bot_chat":
+                await self.continue_bot_ekz.realization_callback(callback, self.api_vk_ekz)
+            case "restart_bot_chat":
+                await self.restart_bot_ekz.realization_callback(callback, self.api_vk_ekz)
             case "owner_lvl":
                 lvl_info_ekz = CLvlInformation()
                 await lvl_info_ekz.realization_callback(callback, self.api_vk_ekz)
