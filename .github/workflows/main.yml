@@ -39,5 +39,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Command-Level Tests
+        working-directory: AmperChatBotVK
         run: |
-          PYTHONPATH=. python AmperChatBotVK/tests/lvl/lvl_tests.py
+          PYTHONPATH=. python tests/lvl/lvl_tests.py
