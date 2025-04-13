@@ -22,4 +22,5 @@ jobs:
 
       - name: Run Command-Level Tests
         run: |
-          python tests/lvl/lvl_tests.py
+          cd ..
+          PYTHONPATH=. python AmperChatBotVK/tests/lvl/lvl_tests.py
