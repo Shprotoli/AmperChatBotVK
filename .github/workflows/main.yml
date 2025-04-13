@@ -10,10 +10,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: List project files
-        run: |
-          ls -R
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -28,4 +24,4 @@ jobs:
         run: |
           export PYTHONPATH=$(pwd)
           cd tests/lvl
-          python -m lvl.lvl_tests
+          python -m lvl_tests
