@@ -22,4 +22,5 @@ jobs:
 
       - name: Run Command-Level Tests
         run: |
+          cd AmperChatBotVK
           python -m AmperChatBotVK.tests.lvl.lvl_tests  # Запускаем тесты с использованием полного пути
