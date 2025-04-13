@@ -22,6 +22,6 @@ jobs:
 
       - name: Run Command-Level Tests
         run: |
-          export PYTHONPATH=$(pwd)
+          export PYTHONPATH=$(pwd)/AmperChatBotVK
           cd tests/lvl
           python -m lvl_tests
