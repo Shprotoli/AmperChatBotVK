@@ -22,4 +22,4 @@ jobs:
 
       - name: Run Command-Level Tests
         run: |
-          PYTHONPATH=. python tests/lvl/lvl_tests.py
+          python tests/lvl/lvl_tests.py
