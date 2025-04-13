@@ -26,5 +26,6 @@ jobs:
 
       - name: Run Command-Level Tests
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)
-          python -m tests.lvl.lvl_tests
+          export PYTHONPATH=$(pwd)
+          cd tests/lvl
+          python -m lvl.lvl_tests
