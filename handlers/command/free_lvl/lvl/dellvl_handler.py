@@ -1,9 +1,12 @@
 """dellvl_handler.py - Файл для команды с удалением админ-прав"""
+from typing import Optional
+
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT
 from AmperChatBot.handlers.api_vk import CApiVK
 from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
+from AmperChatBot.handlers.message import EDeleteMessage
 
 class CDeleteLevel(AHandlerCommand):
     """Класс для обработки команды `/dellvl`"""
@@ -16,66 +19,76 @@ class CDeleteLevel(AHandlerCommand):
         self.api = api
         self.db = DAmperMySQL().lvl_admin_root
 
-    async def _get_id(self, user_info: str) -> int:
-        if "|" in user_info: return int(user_info.split("|")[0].replace("[id", ""))
+    async def _parse_user_id(self, user_info: str) -> Optional[int]:
+        """Извлекает ID пользователя из строки [id12345|Имя]."""
+        if "|" in user_info:
+            return int(user_info.split("|")[0].replace("[id", ""))
 
-    async def _delete_message(self, peer_id: int, id_user: int) -> None:
-        await self.api.send_message(peer_id, f"✉ Вы удалили @id{id_user} (пользователю) админ-права")
+    async def _send_message(self, peer_id: int, user_id: int = None, status: str = "") -> None:
+        messages = {
+            'success': EDeleteMessage.SUCCESS,
+            'no_rights': EDeleteMessage.NO_RIGHTS,
+            'less_rights': EDeleteMessage.LESS_RIGHTS,
+            'self_remove': EDeleteMessage.SELF_REMOVE,
+            'incorrect_id': EDeleteMessage.INCORRECT_ID,
+        }
+        await self.api.send_message(peer_id, messages[status].value.format(user_id=user_id))
 
-    async def _not_delete_message(self, peer_id: int, id_user: int) -> None:
-        await self.api.send_message(peer_id, f"⚠ У @id{id_user} (пользователя) нет админ-прав")
-
-    async def _not_access_for_del_message(self, peer_id: int) -> None:
-        await self.api.send_message(peer_id, f"⛔ У вас недостаточно админ-прав для удаления админ-прав у данного пользователя")
-
-    async def _delete_root_yourself(self, peer_id: int) -> None:
-        await self.api.send_message(peer_id, f"⚠ Вы пытаетесь снять админ-права сами себе")
-
-    async def _check_lvl(self, id_request: int, id_user: int, id_chat: int) -> bool:
+    async def _has_permission_to_remove(self, id_request: int, user_id: int, id_chat: int) -> bool:
         """
         Функция для проверки того, что уровень админ-прав пользователя,
         который удаляет админ-права больше, чем у того, у кого удаляют
 
         :param id_request: ID того, кто удаляет
-        :param id_user: ID того, у кого удаляют
+        :param user_id: ID того, у кого удаляют
         :param id_chat: ID чата
         :return: Возвращает `bool` в зависимости от ситуации
                 - `True`: Если у пользователя отправителя (id_request) админ-права выше,
-                          чем у удаляемого (id_user) или пользователь создатель группы
+                          чем у удаляемого (user_id) или пользователь создатель группы
                 - `False`: В остальных случаях
         """
-        owner_id = await self.api.get_creater_chat(id_chat + 2000000000)
+        owner_id = await self.api.get_creater_chat(id_chat + 2_000_000_000)
 
         user_request_db = await self.db.get(id_request, id_chat)
-        user_request_db = 0 if not user_request_db else user_request_db.lvl_admin_root
+        user_request_admin_lvl = 0 if not user_request_db else user_request_db.lvl_admin_root
 
-        user_db = await self.db.get(id_user, id_chat)
-        user_db = 0 if not user_db else user_db.lvl_admin_root
+        user_target_db = await self.db.get(user_id, id_chat)
+        user_target_admin_lvl = 0 if not user_target_db else user_target_db.lvl_admin_root
 
-        if user_request_db <= user_db and id_request != owner_id:
+        if user_request_admin_lvl <= user_target_admin_lvl and id_request != owner_id:
             return False
-        else:
-            return True
+        return True
+
+    async def _is_valid_user(self, user_string: str, peer_id: int, id_request_user: int) -> bool:
+        user_id = await self._parse_user_id(user_string)
+
+        if not user_id:
+            await self._send_message(peer_id, user_id, status="incorrect_id")
+            return False
+
+        if id_request_user == user_id:
+            await self._send_message(peer_id, user_id, status="self_remove")
+            return False
+        return user_id
 
     async def _realization_command(self, message, args=None) -> None:
-        id_user = await self._get_id(args[0])
+        user_string = args[0]
         id_chat = message.chat_id
         peer_id = message.peer_id
         id_request_user = message.from_id
 
-        if id_request_user == id_user:
-            await self._delete_root_yourself(peer_id)
-            return
+        user_id = await self._is_valid_user(user_string, peer_id, id_request_user)
+        if not user_id: return
 
-        if await self._check_lvl(id_request_user, id_user, id_chat):
-            result_db_remove = await self.db.remove(id_user, id_chat)
+        if await self._has_permission_to_remove(id_request_user, user_id, id_chat):
+            result_db_remove = await self.db.remove(user_id, id_chat)
 
             if result_db_remove:
-                await self._delete_message(peer_id, id_user)
+                await self._send_message(peer_id, user_id, status="success")
             else:
-                await self._not_delete_message(peer_id, id_user)
+                await self._send_message(peer_id, user_id, status="no_rights")
         else:
-            await self._not_access_for_del_message(peer_id)
+            await self._send_message(peer_id, user_id, status="less_rights")
 
     @checked_root_user(started_chat=True, lvl_admin_root=3)
     async def realization_command(self, message, args=None) -> None: await self._realization_command(message, args)
