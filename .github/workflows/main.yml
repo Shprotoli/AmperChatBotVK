@@ -10,6 +10,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: List project files
+        run: |
+          ls -R
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -23,4 +27,4 @@ jobs:
       - name: Run Command-Level Tests
         run: |
           cd AmperChatBotVK
-          python -m AmperChatBotVK.tests.lvl.lvl_tests  # Запускаем тесты с использованием полного пути
+          python -m tests.lvl.lvl_tests
