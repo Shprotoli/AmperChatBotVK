@@ -23,7 +23,7 @@ class DMute(ADataModel):
             session.add(stmt)
             session.commit()
 
-    async def _get_all(self, id_chat: int) -> list[Optional["Mute"]]:
+    async def _get_all_by_chat(self, id_chat: int) -> list[Optional["Mute"]]:
         with self.session() as session:
             stmt = select(Mute).where(
                 (Mute.id_chat == id_chat)
@@ -33,7 +33,7 @@ class DMute(ADataModel):
 
             return mute_users
 
-    async def _get(self, id_user: int, id_chat: int) -> Optional["Mute"]:
+    async def _get_by_user_and_chat(self, id_user: int, id_chat: int) -> Optional["Mute"]:
         with self.session() as session:
             stmt = select(Mute).where(
                 (Mute.id_user == id_user) &
@@ -43,8 +43,8 @@ class DMute(ADataModel):
             mute = result.scalar_one_or_none()
             return mute
 
-    async def get(self, id_user, id_chat): return await self._get(id_user, id_chat)
-    async def get_all(self, id_chat): return await self._get_all(id_chat)
+    async def get_by_user_and_chat(self, id_user, id_chat): return await self._get_by_user_and_chat(id_user, id_chat)
+    async def get_all_by_chat(self, id_chat): return await self._get_all_by_chat(id_chat)
     async def add(self, id_user, id_chat, min): await self._add(id_user, id_chat, min)
 
 class DLvlAdminRoot(ADataModel):
