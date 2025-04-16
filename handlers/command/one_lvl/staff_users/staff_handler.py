@@ -58,7 +58,7 @@ class CStaffList(AHandlerCommand):
         :return: Возвращает `str` с текстом о пользователях онлайн
         """
         list_users_with_nick = {user.id_user: user for user in await self._get_users_with_nick(id_chat)}
-        list_users_staff = await self.db_staff._get_more(id_chat, 1)
+        list_users_staff = await self.db_staff.get_more_in_chat(id_chat, 1)
 
         text_return = "👁️‍🗨️ Список пользователей с админ-правами\n\n"
 

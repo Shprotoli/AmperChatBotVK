@@ -49,10 +49,10 @@ class CDeleteLevel(AHandlerCommand):
         """
         owner_id = await self.api.get_creater_chat(id_chat + 2_000_000_000)
 
-        user_request_db = await self.db.get(id_request, id_chat)
+        user_request_db = await self.db.get_in_chat(id_request, id_chat)
         user_request_admin_lvl = 0 if not user_request_db else user_request_db.lvl_admin_root
 
-        user_target_db = await self.db.get(user_id, id_chat)
+        user_target_db = await self.db.get_in_chat(user_id, id_chat)
         user_target_admin_lvl = 0 if not user_target_db else user_target_db.lvl_admin_root
 
         if user_request_admin_lvl <= user_target_admin_lvl and id_request != owner_id:
@@ -81,7 +81,7 @@ class CDeleteLevel(AHandlerCommand):
         if not user_id: return
 
         if await self._has_permission_to_remove(id_request_user, user_id, id_chat):
-            result_db_remove = await self.db.remove(user_id, id_chat)
+            result_db_remove = await self.db.remove_in_chat(user_id, id_chat)
 
             if result_db_remove:
                 await self._send_message(peer_id, user_id, status="success")

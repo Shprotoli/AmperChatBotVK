@@ -78,7 +78,7 @@ class CSetLvl(AHandlerCommand):
             return
 
         if id_user:
-            check_user_in_db = await self.db.get(id_user, chat_id)
+            check_user_in_db = await self.db.get_in_chat(id_user, chat_id)
 
             if check_user_in_db:
                 await self.db.update_lvl_admin(id_user, chat_id, set_lvl_admin)

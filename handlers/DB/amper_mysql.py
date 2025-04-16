@@ -95,7 +95,7 @@ class DLvlAdminRoot(ADataModel):
                 session.commit()
                 return admin_record
 
-    async def _remove(self, id_user: int, id_chat: int) -> bool:
+    async def _remove_in_chat(self, id_user: int, id_chat: int) -> bool:
         """
         Функция для удаления прав (уровня админ-прав) пользователю
 
@@ -136,7 +136,7 @@ class DLvlAdminRoot(ADataModel):
 
             return admin_record
 
-    async def _get_more(self, id_chat: int, lvl_admin_root: int) -> Optional["LvlAdminRoot"]:
+    async def _get_more_in_chat(self, id_chat: int, lvl_admin_root: int) -> Optional["LvlAdminRoot"]:
         """
         Возвращает пользователей из выбранного чата с выбранным уровнем или больше
 
@@ -156,7 +156,7 @@ class DLvlAdminRoot(ADataModel):
 
             return admin_record
 
-    async def _get(self, id_user: int, id_chat: int) -> Optional["LvlAdminRoot"]:
+    async def _get_in_chat(self, id_user: int, id_chat: int) -> Optional["LvlAdminRoot"]:
         """
         Возвращает пользователя по заданным параметрам из базы `lvl_admin_root`
 
@@ -176,7 +176,7 @@ class DLvlAdminRoot(ADataModel):
 
             return admin_record
 
-    async def _clear(self, id_chat: int) -> None:
+    async def _clear_admins_in_chat(self, id_chat: int) -> None:
         """
         Очищает всю информацию о уровнях администрации в указанном чате (id_chat)
 
@@ -196,11 +196,11 @@ class DLvlAdminRoot(ADataModel):
 
     async def add(self, id_user: int, id_chat: int, lvl_admin_root: int) -> None: await self._add(id_user, id_chat, lvl_admin_root)
     async def get_mr(self, id_user: int, id_chat: int, lvl_admin_root: int) -> Optional["LvlAdminRoot"]: return await self._get_mr(id_user, id_chat, lvl_admin_root)
-    async def get_more(self, id_chat: int, lvl_admin_root: int) -> list["LvlAdminRoot"]: return await self._get_more(id_chat, lvl_admin_root)
-    async def get(self, id_user: int, id_chat: int) -> Optional["LvlAdminRoot"]: return await self._get(id_user, id_chat)
+    async def get_more_in_chat(self, id_chat: int, lvl_admin_root: int) -> list["LvlAdminRoot"]: return await self._get_more_in_chat(id_chat, lvl_admin_root)
+    async def get_in_chat(self, id_user: int, id_chat: int) -> Optional["LvlAdminRoot"]: return await self._get_in_chat(id_user, id_chat)
     async def update_lvl_admin(self, id_user: int, id_chat: int, lvl: int) -> Optional["LvlAdminRoot"]: await self._update_lvl_admin(id_user, id_chat, lvl)
-    async def remove(self, id_user: int, id_chat: int) -> bool: return await self._remove(id_user, id_chat)
-    async def clear(self, id_chat: int) -> bool: return await self._clear(id_chat)
+    async def remove_in_chat(self, id_user: int, id_chat: int) -> bool: return await self._remove_in_chat(id_user, id_chat)
+    async def clear_admins_in_chat(self, id_chat: int) -> bool: return await self._clear_admins_in_chat(id_chat)
 
 class DNickName(ADataModel):
     def __init__(self, session):
