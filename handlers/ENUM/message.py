@@ -22,3 +22,7 @@ class EKickMessage(Enum):
 class EGetNick(Enum):
     SUCCESS = "✉ Ник @id{user_id} (пользователя) - {new_nick}"
     NO_NICK = "✉ У @id{user_id} (пользователя) нет ника"
+    
+class ERemoveNick(Enum):
+    SUCCESS = "✉ Вы удалили @id{user_id} (пользователю) ник"
+    NO_NICK = "⚠ У @id{user_id} (пользователя) нет ника"
