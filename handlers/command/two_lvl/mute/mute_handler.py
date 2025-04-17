@@ -16,9 +16,6 @@ class CMute(AHandlerCommand):
         self.api = api
         self.db = DAmperMySQL().mute_db
 
-    async def _get_id(self, user_info: str) -> int:
-        if "|" in user_info: return int(user_info.split("|")[0].replace("[id", ""))
-
     async def _not_correct_min_message(self, peer_id: int, request_user_id: int) -> None:
         await self.api.send_message(peer_id, f"⚠ @id{request_user_id} (Вы) неправильно передали аргументы\n"
                                              f"❓ Например: /mute @id1 1")
@@ -35,7 +32,7 @@ class CMute(AHandlerCommand):
 
     async def _realization_command(self, message, args=None) -> None:
         request_user_id = message.from_id
-        user_id = await self._get_id(args[0])
+        user_id = await self.api.parse_user_id(args[0])
         peer_id = message.peer_id
         try:
             minute_mute = int(args[1])

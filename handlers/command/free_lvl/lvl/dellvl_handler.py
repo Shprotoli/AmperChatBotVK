@@ -1,12 +1,10 @@
 """dellvl_handler.py - Файл для команды с удалением админ-прав"""
-from typing import Optional
-
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT
 from AmperChatBot.handlers.api_vk import CApiVK
 from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
-from AmperChatBot.handlers.message import EDeleteMessage
+from AmperChatBot.handlers.ENUM.message import EDeleteLvlMessage
 
 class CDeleteLevel(AHandlerCommand):
     """Класс для обработки команды `/dellvl`"""
@@ -15,24 +13,17 @@ class CDeleteLevel(AHandlerCommand):
     ARGS = 1
     SEP = None
 
+    MESSAGES_DICT = {
+        'success': EDeleteLvlMessage.SUCCESS,
+        'no_rights': EDeleteLvlMessage.NO_RIGHTS,
+        'less_rights': EDeleteLvlMessage.LESS_RIGHTS,
+        'self_remove': EDeleteLvlMessage.SELF_REMOVE,
+        'incorrect_id': EDeleteLvlMessage.INCORRECT_ID,
+    }
+
     def __init__(self, api: "CApiVK"):
         self.api = api
         self.db = DAmperMySQL().lvl_admin_root
-
-    async def _parse_user_id(self, user_info: str) -> Optional[int]:
-        """Извлекает ID пользователя из строки [id12345|Имя]."""
-        if "|" in user_info:
-            return int(user_info.split("|")[0].replace("[id", ""))
-
-    async def _send_message(self, peer_id: int, user_id: int = None, status: str = "") -> None:
-        messages = {
-            'success': EDeleteMessage.SUCCESS,
-            'no_rights': EDeleteMessage.NO_RIGHTS,
-            'less_rights': EDeleteMessage.LESS_RIGHTS,
-            'self_remove': EDeleteMessage.SELF_REMOVE,
-            'incorrect_id': EDeleteMessage.INCORRECT_ID,
-        }
-        await self.api.send_message(peer_id, messages[status].value.format(user_id=user_id))
 
     async def _has_permission_to_remove(self, id_request: int, user_id: int, id_chat: int) -> bool:
         """
@@ -60,14 +51,14 @@ class CDeleteLevel(AHandlerCommand):
         return True
 
     async def _is_valid_user(self, user_string: str, peer_id: int, id_request_user: int) -> bool:
-        user_id = await self._parse_user_id(user_string)
+        user_id = await self.api.parse_user_id(user_string)
 
         if not user_id:
-            await self._send_message(peer_id, user_id, status="incorrect_id")
+            await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="incorrect_id")
             return False
 
         if id_request_user == user_id:
-            await self._send_message(peer_id, user_id, status="self_remove")
+            await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="self_remove")
             return False
         return user_id
 
@@ -84,11 +75,11 @@ class CDeleteLevel(AHandlerCommand):
             result_db_remove = await self.db.remove_in_chat(user_id, id_chat)
 
             if result_db_remove:
-                await self._send_message(peer_id, user_id, status="success")
+                await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="success")
             else:
-                await self._send_message(peer_id, user_id, status="no_rights")
+                await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="no_rights")
         else:
-            await self._send_message(peer_id, user_id, status="less_rights")
+            await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="less_rights")
 
     @checked_root_user(started_chat=True, lvl_admin_root=3)
     async def realization_command(self, message, args=None) -> None: await self._realization_command(message, args)
