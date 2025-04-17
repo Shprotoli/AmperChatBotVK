@@ -4,7 +4,7 @@ from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT
 from AmperChatBot.handlers.api_vk import CApiVK
 from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
-from AmperChatBot.handlers.ENUM.message import EDeleteMessage
+from AmperChatBot.handlers.ENUM.message import EDeleteLvlMessage
 
 class CDeleteLevel(AHandlerCommand):
     """Класс для обработки команды `/dellvl`"""
@@ -14,11 +14,11 @@ class CDeleteLevel(AHandlerCommand):
     SEP = None
 
     MESSAGES_DICT = {
-        'success': EDeleteMessage.SUCCESS,
-        'no_rights': EDeleteMessage.NO_RIGHTS,
-        'less_rights': EDeleteMessage.LESS_RIGHTS,
-        'self_remove': EDeleteMessage.SELF_REMOVE,
-        'incorrect_id': EDeleteMessage.INCORRECT_ID,
+        'success': EDeleteLvlMessage.SUCCESS,
+        'no_rights': EDeleteLvlMessage.NO_RIGHTS,
+        'less_rights': EDeleteLvlMessage.LESS_RIGHTS,
+        'self_remove': EDeleteLvlMessage.SELF_REMOVE,
+        'incorrect_id': EDeleteLvlMessage.INCORRECT_ID,
     }
 
     def __init__(self, api: "CApiVK"):

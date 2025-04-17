@@ -7,10 +7,12 @@ from vkbottle_types.objects import UsersUserFull
 from vkbottle.bot import Message
 
 class AHandlerCommand(ABC):
-    COMMAND = str # Команда для handler, например `help`
-    PREFIX = Tuple[str] # Префикс для команды, например `("/", ".")`
-    ARGS = int # Количество аргументов, например `2`
+    COMMAND = str # Команда для handler, например: `help`
+    PREFIX = Tuple[str] # Префикс для команды, например: `("/", ".")`
+    ARGS = int # Количество аргументов, например: `2`
     SEP = str
+
+    MESSAGES_DICT = dict
 
     @abstractmethod
     def __init__(self, bot: "AApiVk"):
@@ -133,7 +135,9 @@ class AApiVk(ABC):
         pass
 
     @abstractmethod
-    async def _send_message_by_list(self, peer_id: int, user_id: int, messages_dict: tuple, status: str, index: int) -> None:
+    async def _send_message_by_list(self, peer_id: int, user_id: int, messages_dict: tuple, status: str, index: int,
+                                    id_request: int, admin_lvl_set: int
+                                    ) -> None:
         """
         Функция для отправки сообщения с предоставлением списка сообщений
 
@@ -154,11 +158,14 @@ class AApiVk(ABC):
 
 
         :param peer_id: ID чата
-        :param user_id: ID пользователя для вставки его в сообщения
+        :param user_id: ID пользователя для вставки его в сообщение
         :param messages_dict: Словарь с сообщениями
 
         :param status: Ключ для словаря `messages_dict`
-        :param index: Индекс сообщения для словаря `messages_dict`
+        :param index [Не обязательно] (Дополнительно): Индекс сообщения для словаря `messages_dict`
+
+        :param id_request [Не обязательно]: ID пользователя, который писал команду для вставки его в сообщение
+        :param admin_lvl_set [Не обязательно]: Уровень админ-прав на который устанавливается
         """
         pass
 
