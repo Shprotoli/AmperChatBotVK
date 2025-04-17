@@ -18,3 +18,7 @@ class ESetLvlessage(Enum):
 class EKickMessage(Enum):
     SUCCESS = "👀 @id{user_id} (Пользователя) выкидывают с этой вечеринки"
     NOT_IN_CHAT = "⛔ @id{user_id} (Пользователя) нет в данном чате"
+
+class EGetNick(Enum):
+    SUCCESS = "✉ Ник @id{user_id} (пользователя) - {new_nick}"
+    NO_NICK = "✉ У @id{user_id} (пользователя) нет ника"
