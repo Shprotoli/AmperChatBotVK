@@ -32,3 +32,6 @@ class ESetNick(Enum):
     SUCCESS_UPDATE = "✉ @id{id_request} (Пользователь) обновил @id{user_id} (пользователю) ник на - '{new_nick}'"
     MAX_LIMIT = "⚠ Максимальная длинна ника - 60 символова"
     MIN_LIMIT = "⚠ Минимальная длинна ника - 3 символа"
+
+class EUnMute(Enum):
+    SUCCESS = "✉ @id{request_user_id} (Вы) сняли мут @id{user_id} (пользователю)"
