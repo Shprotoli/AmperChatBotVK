@@ -5,13 +5,19 @@ from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_us
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT
 from AmperChatBot.handlers.api_vk import CApiVK
+from AmperChatBot.handlers.ENUM.message import ERandom
 
 class CRandom(AHandlerCommand):
-    """Класс для обработки команды `/q`"""
+    """Класс для обработки команды `/random`"""
     COMMAND = "random"
     PREFIX = PREFIX_DEFAULT
     ARGS = 2
     SEP = None
+
+    MESSAGES_DICT = {
+        'success': ERandom.SUCCESS,
+        'incorrect_format': ERandom.INCORRECT_FORMAT,
+    }
 
     def __init__(self, api: "CApiVK"):
         self.api = api
@@ -41,13 +47,14 @@ class CRandom(AHandlerCommand):
             return
 
     async def _realization_command(self, message, args=None) -> None:
-        used_id = message.from_id
+        peer_id = message.peer_id
+        user_id = message.from_id
         generate_value = await self._generate_value(args)
 
         if generate_value:
-            await self._send_generate_value_message(message, used_id, generate_value)
+            await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="success", value_random=generate_value)
         else:
-            await self._error_generate_value_message(message, used_id)
+            await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="incorrect_format")
 
     @checked_root_user(started_chat=True)
     async def realization_command(self, message, args=None) -> None: await self._realization_command(message, args)

@@ -136,7 +136,7 @@ class AApiVk(ABC):
 
     @abstractmethod
     async def _send_message_by_list(self, peer_id: int, user_id: int, messages_dict: tuple, status: str, index: int,
-                                    id_request: int, admin_lvl_set: int, nick: str, new_nick: str,
+                                    id_request: int, admin_lvl_set: int, nick: str, new_nick: str, value_random: int,
                                     ) -> None:
         """
         Функция для отправки сообщения с предоставлением списка сообщений
@@ -168,6 +168,7 @@ class AApiVk(ABC):
         :param admin_lvl_set [Не обязательно]: Уровень админ-прав на который устанавливается
         :param nick [Не обязательно]: Ник пользователя
         :param new_nick [Не обязательно]: Новый ник, который установили пользователю
+        :param value_random [Не обязательно]: Сгенерированное число
         """
         pass
 
