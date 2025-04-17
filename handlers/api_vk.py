@@ -50,7 +50,7 @@ class CApiVK(AApiVk):
     async def _parse_user_id(self, user_info: str) -> Optional[int]:
         """Извлекает ID пользователя из строки [id12345|Имя]"""
         if "|" in user_info:
-            return int(user_info.split("|")[0].replace("[id", ""))
+            return int(user_info.split("|")[0].replace("[id", "").replace("id", ""))
 
     async def _get_creater_chat(self, peer_id):
         try:
@@ -88,7 +88,7 @@ class CApiVK(AApiVk):
             event_data=dumps({"type": "show_snackbar", "text": message}),
         )
 
-    async def _send_message_by_list(self, peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set):
+    async def _send_message_by_list(self, peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set, new_nick):
         if not any([status, index]):
             raise NotArgumentAccess("Not passed argument access in functional")
 
@@ -100,12 +100,13 @@ class CApiVK(AApiVk):
                 admin_lvl_set=admin_lvl_set,
                 id_request=id_request,
                 user_id=user_id,
+                new_nick=new_nick,
             ))
         await self._send_message(peer_id, messages_list[status].value.format(
             admin_lvl_set=admin_lvl_set,
             id_request=id_request,
             user_id=user_id,
-
+            new_nick=new_nick,
         ))
 
 
@@ -147,8 +148,12 @@ class CApiVK(AApiVk):
         await self._edit_message_chat(peer_id, conversation_message_id, message, keyboard)
     async def send_notif(self, peer_id, event_id, user_id, message): await self._send_notif(peer_id, event_id, user_id, message)
     async def send_message(self, peer_id, message_text): await self._send_message(peer_id, message_text)
-    async def send_messages_by_list(self, peer_id, user_id, messages_list, status=None, index=None, id_request=None, admin_lvl_set=None):
-        await self._send_message_by_list(peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set)
+    async def send_messages_by_list(self, peer_id, user_id, messages_list, status=None, index=None,
+                                    id_request=None,
+                                    admin_lvl_set=None,
+                                    new_nick=None,
+                                    ):
+        await self._send_message_by_list(peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set, new_nick)
     async def get_info_chat(self, peer_id): return await self._get_info_chat(peer_id)
     async def get_info_user(self, user_id): return await self._get_info_user(user_id)
     async def parse_user_id(self, user_info): return await self._parse_user_id(user_info)
