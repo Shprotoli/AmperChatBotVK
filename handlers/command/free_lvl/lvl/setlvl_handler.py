@@ -16,9 +16,6 @@ class CSetLvl(AHandlerCommand):
         self.api = api
         self.db = DAmperMySQL().lvl_admin_root
 
-    async def _get_id(self, user_info: str) -> int:
-        if "|" in user_info: return int(user_info.split("|")[0].replace("[id", ""))
-
     async def _check_set_admin_root(self, owner_id: int, request_id_user: int, set_lvl_admin: int, peer_id: int) -> bool:
         """
         Функция проверки то, что уровень, который пытаемся установить
@@ -63,7 +60,7 @@ class CSetLvl(AHandlerCommand):
         owner_id = await self.api.get_creater_chat(peer_id)
         id_request_user = message.from_id
 
-        id_user = await self._get_id(args[0])
+        id_user = await self.api.parse_user_id(args[0])
         try:
             set_lvl_admin = int(args[1])
         except ValueError:

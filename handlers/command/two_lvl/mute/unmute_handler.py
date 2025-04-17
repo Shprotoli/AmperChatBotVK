@@ -16,15 +16,12 @@ class CUnMute(AHandlerCommand):
         self.api = api
         self.db = DAmperMySQL().mute_db
 
-    async def _get_id(self, user_info: str) -> int:
-        if "|" in user_info: return int(user_info.split("|")[0].replace("[id", ""))
-
     async def _unmute_message(self, peer_id: int, user_id:int, request_user_id: int) -> None:
         await self.api.send_message(peer_id, f"✉ @id{request_user_id} (Вы) сняли мут @id{user_id} (пользователю)")
 
     async def _realization_command(self, message, args=None) -> None:
         request_user_id = message.from_id
-        user_id = await self._get_id(args[0])
+        user_id = await self.api.parse_user_id(args[0])
         peer_id = message.peer_id
 
         await self.api.punishment.unmute(peer_id, user_id)

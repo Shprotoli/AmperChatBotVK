@@ -1,12 +1,10 @@
 """dellvl_handler.py - Файл для команды с удалением админ-прав"""
-from typing import Optional
-
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
 from AmperChatBot.handlers.ABC.ABCAmper import AHandlerCommand
 from AmperChatBot.handlers.command.config_command import PREFIX_DEFAULT
 from AmperChatBot.handlers.api_vk import CApiVK
 from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
-from AmperChatBot.handlers.message import EDeleteMessage
+from AmperChatBot.handlers.ENUM.message import EDeleteMessage
 
 class CDeleteLevel(AHandlerCommand):
     """Класс для обработки команды `/dellvl`"""
@@ -18,11 +16,6 @@ class CDeleteLevel(AHandlerCommand):
     def __init__(self, api: "CApiVK"):
         self.api = api
         self.db = DAmperMySQL().lvl_admin_root
-
-    async def _parse_user_id(self, user_info: str) -> Optional[int]:
-        """Извлекает ID пользователя из строки [id12345|Имя]."""
-        if "|" in user_info:
-            return int(user_info.split("|")[0].replace("[id", ""))
 
     async def _send_message(self, peer_id: int, user_id: int = None, status: str = "") -> None:
         messages = {
@@ -60,7 +53,7 @@ class CDeleteLevel(AHandlerCommand):
         return True
 
     async def _is_valid_user(self, user_string: str, peer_id: int, id_request_user: int) -> bool:
-        user_id = await self._parse_user_id(user_string)
+        user_id = await self.api.parse_user_id(user_string)
 
         if not user_id:
             await self._send_message(peer_id, user_id, status="incorrect_id")

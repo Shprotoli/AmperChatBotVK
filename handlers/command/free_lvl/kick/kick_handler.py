@@ -1,4 +1,6 @@
 """rnick_handler.py - Файл для команды с удалением ника у пользователя"""
+from typing import Optional
+
 from vkbottle.exception_factory.base_exceptions import VKAPIError
 
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user
@@ -20,9 +22,6 @@ class CKick(AHandlerCommand):
 
         self.db = DAmperMySQL().nick_name_db
 
-    async def _get_id(self, user_info: str) -> int:
-        if "|" in user_info: return int(user_info.split("|")[0].replace("[id", ""))
-
     async def _user_kick_message(self, peer_id: int, id_user: int):
         await self.api.send_message(peer_id, f"👀 @id{id_user} (Пользователя) выкидывают с этой вечеринки.")
 
@@ -30,7 +29,7 @@ class CKick(AHandlerCommand):
         await self.api.send_message(peer_id, f"⛔ @id{id_user} (Пользователя) нет в данном чате.")
 
     async def _realization_command(self, message, args=None) -> None:
-        id_user = await self._get_id(args[0])
+        id_user = await self.api.parse_user_id(args[0])
         id_chat = message.chat_id
         peer_id = message.peer_id
 

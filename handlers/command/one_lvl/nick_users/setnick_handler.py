@@ -16,9 +16,6 @@ class CSetNick(AHandlerCommand):
         self.api = api
         self.db = DAmperMySQL().nick_name_db
 
-    async def _get_id(self, user_info: str) -> int:
-        if "|" in user_info: return int(user_info.split("|")[0].replace("id", ""))
-
     async def _check_len_new_nick(self, new_nick: str, peer_id: int) -> bool:
         """
         Функция проверки ника на то, что он не меньше и не больше заданных параметров
@@ -54,7 +51,7 @@ class CSetNick(AHandlerCommand):
         id_chat = message.peer_id - 2000000000
         id_request_user = message.from_id
 
-        id_user = await self._get_id(args[0])
+        id_user = await self.api.parse_user_id(args[0])
         new_nick = args[1]
 
         if not await self._check_len_new_nick(new_nick, peer_id):

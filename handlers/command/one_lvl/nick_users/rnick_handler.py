@@ -16,9 +16,6 @@ class CRemoveNick(AHandlerCommand):
         self.api = api
         self.db = DAmperMySQL().nick_name_db
 
-    async def _get_id(self, user_info: str) -> int:
-        if "|" in user_info: return int(user_info.split("|")[0].replace("[id", ""))
-
     async def _delete_message(self, peer_id: int, id_user: int):
         await self.api.send_message(peer_id, f"✉ Вы удалили @id{id_user} (пользователю) ник")
 
@@ -26,7 +23,7 @@ class CRemoveNick(AHandlerCommand):
         await self.api.send_message(peer_id, f"⚠ У @id{id_user} (пользователя) нет ника")
 
     async def _realization_command(self, message, args=None) -> None:
-        id_user = await self._get_id(args[0])
+        id_user = await self.api.parse_user_id(args[0])
         id_chat = message.chat_id
         peer_id = message.peer_id
 

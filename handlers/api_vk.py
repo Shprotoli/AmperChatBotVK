@@ -1,5 +1,6 @@
 """api_vk.py - Файл предназначенный для работы с API вконтакнте"""
 from json import dumps
+from typing import Optional
 
 from vkbottle.exception_factory.base_exceptions import VKAPIError
 from vkbottle import Bot
@@ -44,6 +45,11 @@ class CApiVK(AApiVk):
         self.bot = bot
 
         self._punishment = CPunishmentApiVK(bot)
+
+    async def _parse_user_id(self, user_info: str) -> Optional[int]:
+        """Извлекает ID пользователя из строки [id12345|Имя]"""
+        if "|" in user_info:
+            return int(user_info.split("|")[0].replace("[id", ""))
 
     async def _get_creater_chat(self, peer_id):
         try:
@@ -120,3 +126,4 @@ class CApiVK(AApiVk):
     async def send_message(self, peer_id, message_text): await self._send_message(peer_id, message_text)
     async def get_info_chat(self, peer_id): return await self._get_info_chat(peer_id)
     async def get_info_user(self, user_id): return await self._get_info_user(user_id)
+    async def parse_user_id(self, user_info): return await self._parse_user_id(user_info)
