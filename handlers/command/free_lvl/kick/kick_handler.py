@@ -1,6 +1,4 @@
 """rnick_handler.py - Файл для команды с удалением ника у пользователя"""
-from typing import Optional
-
 from vkbottle.exception_factory.base_exceptions import VKAPIError
 
 from AmperChatBot.handlers.callback.checked_root_decorate import checked_root_user

@@ -133,13 +133,42 @@ class AApiVk(ABC):
         pass
 
     @abstractmethod
+    async def _send_message_by_list(self, peer_id: int, user_id: int, messages_dict: tuple, status: str, index: int) -> None:
+        """
+        Функция для отправки сообщения с предоставлением списка сообщений
+
+        - Например:
+            ._send_message_by_list(
+                peer_id=1000000000,
+                user_id=1,
+                message_list={
+                    'success': EDeleteMessage.SUCCESS,
+                    'no_rights': EDeleteMessage.NO_RIGHTS,
+                    'less_rights': EDeleteMessage.LESS_RIGHTS,
+                    'self_remove': EDeleteMessage.SELF_REMOVE,
+                    'incorrect_id': EDeleteMessage.INCORRECT_ID,
+                },
+                status="success",
+            )
+
+
+
+        :param peer_id: ID чата
+        :param user_id: ID пользователя для вставки его в сообщения
+        :param messages_dict: Словарь с сообщениями
+
+        :param status: Ключ для словаря `messages_dict`
+        :param index: Индекс сообщения для словаря `messages_dict`
+        """
+        pass
+
+    @abstractmethod
     async def send_message(self, peer_id: int, message_text: str) -> None:
         """
         Функция для отправки сообщения в группу
 
         :param peer_id: ID беседы
         :param message_text: Текст для сообщения
-        :return None
         """
         pass
 
@@ -169,6 +198,5 @@ class AApiVk(ABC):
         Функция для получения списка пользователей онлайн
 
         :param peer_id: ID группы
-        :return:
         """
         pass
