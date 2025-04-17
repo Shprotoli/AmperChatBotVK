@@ -88,7 +88,7 @@ class CApiVK(AApiVk):
             event_data=dumps({"type": "show_snackbar", "text": message}),
         )
 
-    async def _send_message_by_list(self, peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set, new_nick):
+    async def _send_message_by_list(self, peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set, nick, new_nick):
         if not any([status, index]):
             raise NotArgumentAccess("Not passed argument access in functional")
 
@@ -100,12 +100,14 @@ class CApiVK(AApiVk):
                 admin_lvl_set=admin_lvl_set,
                 id_request=id_request,
                 user_id=user_id,
+                nick=nick,
                 new_nick=new_nick,
             ))
         await self._send_message(peer_id, messages_list[status].value.format(
             admin_lvl_set=admin_lvl_set,
             id_request=id_request,
             user_id=user_id,
+            nick=nick,
             new_nick=new_nick,
         ))
 
@@ -151,9 +153,12 @@ class CApiVK(AApiVk):
     async def send_messages_by_list(self, peer_id, user_id, messages_list, status=None, index=None,
                                     id_request=None,
                                     admin_lvl_set=None,
+                                    nick=None,
                                     new_nick=None,
                                     ):
-        await self._send_message_by_list(peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set, new_nick)
+        await self._send_message_by_list(peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set,
+                                         nick, new_nick,
+                                         )
     async def get_info_chat(self, peer_id): return await self._get_info_chat(peer_id)
     async def get_info_user(self, user_id): return await self._get_info_user(user_id)
     async def parse_user_id(self, user_info): return await self._parse_user_id(user_info)

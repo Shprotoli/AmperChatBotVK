@@ -20,9 +20,15 @@ class EKickMessage(Enum):
     NOT_IN_CHAT = "⛔ @id{user_id} (Пользователя) нет в данном чате"
 
 class EGetNick(Enum):
-    SUCCESS = "✉ Ник @id{user_id} (пользователя) - {new_nick}"
+    SUCCESS = "✉ Ник @id{user_id} (пользователя) - {nick}"
     NO_NICK = "✉ У @id{user_id} (пользователя) нет ника"
     
 class ERemoveNick(Enum):
     SUCCESS = "✉ Вы удалили @id{user_id} (пользователю) ник"
     NO_NICK = "⚠ У @id{user_id} (пользователя) нет ника"
+    
+class ESetNick(Enum):
+    SUCCESS_SET = "✉ @id{id_request} (Пользователь) установил @id{user_id} (пользователю) ник - '{new_nick}'"
+    SUCCESS_UPDATE = "✉ @id{id_request} (Пользователь) обновил @id{user_id} (пользователю) ник на - '{new_nick}'"
+    MAX_LIMIT = "⚠ Максимальная длинна ника - 60 символова"
+    MIN_LIMIT = "⚠ Минимальная длинна ника - 3 символа"

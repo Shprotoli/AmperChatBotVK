@@ -36,7 +36,7 @@ class CGetNick(AHandlerCommand):
         user_db = await self.db.get(id_chat, user_id)
 
         if not user_db: await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="no_nick")
-        else: await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="success", new_nick=user_db.nick)
+        else: await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="success", nick=user_db.nick)
 
     @checked_root_user(started_chat=True, lvl_admin_root=1)
     async def realization_command(self, message, args=None) -> None: await self._realization_command(message, args)
