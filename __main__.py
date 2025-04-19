@@ -1,4 +1,3 @@
-# -*- codingc: utf-8 -*-
 """__main__.py - Основная реализация и запуск бота"""
 from asyncio import run
 
