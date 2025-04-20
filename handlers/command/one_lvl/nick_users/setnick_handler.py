@@ -42,19 +42,22 @@ class CSetNick(AHandlerCommand):
 
         return True
 
-
-    async def _realization_command(self, message, args=None) -> None:
-        peer_id = message.peer_id
-        id_chat = message.peer_id - 2000000000
-        id_request_user = message.from_id
-
+    async def _is_valid_user(self, args: list, peer_id: int, id_chat: int) -> tuple:
         user_id = await self.api.parse_user_id(args[0])
         new_nick = args[1]
 
         if not await self._check_len_new_nick(new_nick, peer_id):
             return
 
-        check_user_in_db = await self.db.get(id_chat, user_id)
+        return user_id, new_nick, await self.db.get(id_chat, user_id)
+
+    async def _realization_command(self, message, args=None) -> None:
+        peer_id = message.peer_id
+        id_chat = message.peer_id - 2000000000
+        id_request_user = message.from_id
+
+        user_id, new_nick, check_user_in_db = await self._is_valid_user(args, peer_id, id_chat)
+
         if check_user_in_db:
             await self.db.update(user_id, id_chat, new_nick)
             await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="success_update", id_request=id_request_user, new_nick=new_nick)

@@ -30,11 +30,7 @@ class CNickList(AHandlerCommand):
 
         return first_name + " " + last_name
 
-    async def _realization_command(self, message, args=None) -> None:
-        peer_id = message.peer_id
-        id_chat = message.peer_id - 2000000000
-        list_user_with_nick = await self._get_users_with_nick(id_chat)
-
+    async def _generate_text(self, list_user_with_nick: list) -> str:
         text_return = "👥 Список пользователей с ником\n\n"
 
         for id, user in enumerate(list_user_with_nick):
@@ -44,6 +40,15 @@ class CNickList(AHandlerCommand):
             full_name = await self._get_name_user(id_user)
 
             text_return += f"{id + 1}. {user_nick} - @id{id_user} ({full_name})\n"
+
+        return text_return
+
+    async def _realization_command(self, message, args=None) -> None:
+        peer_id = message.peer_id
+        id_chat = message.peer_id - 2000000000
+
+        list_user_with_nick = await self._get_users_with_nick(id_chat)
+        text_return = await self._generate_text(list_user_with_nick)
 
         await self.api.send_message(peer_id, text_return)
 

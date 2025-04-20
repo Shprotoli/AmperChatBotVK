@@ -26,7 +26,7 @@ class CSetLvl(AHandlerCommand):
         self.api = api
         self.db = DAmperMySQL().lvl_admin_root
 
-    async def _check_set_admin_root(self, owner_id: int, user_id: int, request_user_id: int, set_lvl_admin: int, peer_id: int) -> bool:
+    async def _check_range_admin_root(self, owner_id: int, user_id: int, request_user_id: int, set_lvl_admin: int, peer_id: int) -> bool:
         """
         Функция проверки то, что уровень, который пытаемся установить
         не больше и не меньше заданных параметров
@@ -46,25 +46,30 @@ class CSetLvl(AHandlerCommand):
             return False
         return True
 
+    async def _is_valid_user(self, args: list, owner_id: int, peer_id: int, id_request_user: int) -> tuple:
+        user_id = await self.api.parse_user_id(args[0])
+        try:
+            set_lvl_admin = int(args[1])
+        except ValueError:
+            await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="incorrect_arg")
+            return [None, None]
+
+        if not await self._check_range_admin_root(owner_id, user_id, id_request_user, set_lvl_admin, peer_id):
+            return [None, None]
+
+        if id_request_user == user_id:
+            await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="self_set")
+            return [None, None]
+
+        return set_lvl_admin, user_id
+
     async def _realization_command(self, message, args=None) -> None:
         peer_id = message.peer_id
         chat_id = message.peer_id - 2000000000
         owner_id = await self.api.get_creater_chat(peer_id)
         id_request_user = message.from_id
 
-        user_id = await self.api.parse_user_id(args[0])
-        try:
-            set_lvl_admin = int(args[1])
-        except ValueError:
-            await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="incorrect_arg")
-            return
-
-        if not await self._check_set_admin_root(owner_id, user_id, id_request_user, set_lvl_admin, peer_id):
-            return
-
-        if id_request_user == user_id:
-            await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="self_set")
-            return
+        set_lvl_admin, user_id = await self._is_valid_user(args, owner_id, peer_id, id_request_user)
 
         if user_id:
             check_user_in_db = await self.db.get_in_chat(user_id, chat_id)
