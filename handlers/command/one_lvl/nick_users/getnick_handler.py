@@ -22,10 +22,10 @@ class CGetNick(AHandlerCommand):
         self.api = api
         self.db = DAmperMySQL().nick_name_db
 
-    async def _not_name_message(self, peer_id: int, user_id: int):
+    async def _not_name_message(self, peer_id: int, user_id: int) -> None:
         await self.api.send_message(peer_id, f"✉ У @id{user_id} (пользователя) нет ника")
 
-    async def _name_message(self, peer_id: int, user_id: int, name_user: str):
+    async def _name_message(self, peer_id: int, user_id: int, name_user: str) -> None:
         await self.api.send_message(peer_id, f"✉ Ник @id{user_id} (пользователя) - {name_user}")
 
     async def _realization_command(self, message, args=None) -> None:

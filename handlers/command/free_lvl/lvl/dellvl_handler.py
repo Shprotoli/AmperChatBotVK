@@ -50,7 +50,7 @@ class CDeleteLevel(AHandlerCommand):
             return False
         return True
 
-    async def _is_valid_user(self, user_string: str, peer_id: int, id_request_user: int) -> bool:
+    async def _is_valid_user(self, user_string: str, peer_id: int, id_request_user: int) -> int:
         user_id = await self.api.parse_user_id(user_string)
 
         if not user_id:

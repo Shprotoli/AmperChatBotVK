@@ -81,7 +81,7 @@ class CLvlInformation(ACallbackHandler):
         self.event_id = self.information_callback['event_id']
         self.conversation_message_id = self.information_callback['conversation_message_id']
 
-    async def _realization_callback_lvl_zero(self):
+    async def _realization_callback_lvl_zero(self) -> None:
         """
         Реализация callback ответа на запрос с информацией 0 уровня
 
@@ -92,7 +92,7 @@ class CLvlInformation(ACallbackHandler):
 
         await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, message=text_lvl, keyboard=keyboard)
 
-    async def _realization_callback_lvl_one(self):
+    async def _realization_callback_lvl_one(self) -> None:
         """
         Реализация callback ответа на запрос с информацией 1 уровня
 
@@ -103,7 +103,7 @@ class CLvlInformation(ACallbackHandler):
 
         await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, message=text_lvl, keyboard=keyboard)
 
-    async def _realization_callback_lvl_two(self):
+    async def _realization_callback_lvl_two(self) -> None:
         """
         Реализация callback ответа на запрос с информацией 2 уровня
 
@@ -114,7 +114,7 @@ class CLvlInformation(ACallbackHandler):
 
         await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, message=text_lvl, keyboard=keyboard)
 
-    async def _realization_callback_lvl_free(self):
+    async def _realization_callback_lvl_free(self) -> None:
         """
         Реализация callback ответа на запрос с информацией 3 уровня
 
@@ -125,7 +125,7 @@ class CLvlInformation(ACallbackHandler):
 
         await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, message=text_lvl, keyboard=keyboard)
 
-    async def _realization_callback_lvl_owner(self):
+    async def _realization_callback_lvl_owner(self) -> None:
         """
         Реализация callback ответа на запрос с информацией владельца беседы
 
@@ -137,13 +137,13 @@ class CLvlInformation(ACallbackHandler):
         await self.api_vk_class.edit_message_chat(self.peer_id, self.conversation_message_id, message=text_lvl, keyboard=keyboard)
 
 
-    async def realization_callback_lvl_owner(self): await self._realization_callback_lvl_owner()
-    async def realization_callback_lvl_zero(self): await self._realization_callback_lvl_zero()
-    async def realization_callback_lvl_one(self): await self._realization_callback_lvl_one()
-    async def realization_callback_lvl_two(self): await self._realization_callback_lvl_two()
-    async def realization_callback_lvl_free(self): await self._realization_callback_lvl_free()
+    async def realization_callback_lvl_owner(self) -> None: await self._realization_callback_lvl_owner()
+    async def realization_callback_lvl_zero(self) -> None: await self._realization_callback_lvl_zero()
+    async def realization_callback_lvl_one(self) -> None: await self._realization_callback_lvl_one()
+    async def realization_callback_lvl_two(self) -> None: await self._realization_callback_lvl_two()
+    async def realization_callback_lvl_free(self) -> None: await self._realization_callback_lvl_free()
 
-    async def _realization_callback(self, information_callback, api_vk_class):
+    async def _realization_callback(self, information_callback, api_vk_class) -> None:
         """
         В данном классе данная функция отвечает за начальную инициализацию следующих объектов
             - `api_vk_class`: Для управления API VK из класса
@@ -152,7 +152,7 @@ class CLvlInformation(ACallbackHandler):
         self.api_vk_class = api_vk_class
         self.information_callback = information_callback
 
-    async def realization_callback(self, information_callback, api_vk_class): await self._realization_callback(information_callback, api_vk_class)
+    async def realization_callback(self, information_callback, api_vk_class) -> None: await self._realization_callback(information_callback, api_vk_class)
 
 class CHelp(AHandlerCommand):
     """Класс для обработки команды `/help`"""

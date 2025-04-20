@@ -23,7 +23,7 @@ class CRandom(AHandlerCommand):
         self.api = api
         self.punishment = api.punishment
 
-    async def _send_generate_value_message(self, message, user_id: int, value: int):
+    async def _send_generate_value_message(self, message, user_id: int, value: int) -> None:
         await message.answer(f"🤖 @id{user_id} (Пользователю) выпало число: {value}")
 
     async def _error_generate_value_message(self, message, user_id: int) -> None:
