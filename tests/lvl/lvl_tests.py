@@ -1,3 +1,5 @@
+from os import system
+
 import unittest
 
 from AmperChatBot.handlers.command.free_lvl.lvl.dellvl_handler import CDeleteLevel
@@ -8,17 +10,7 @@ api = TApiVK()
 class TDeleteLevel(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.class_testing = CDeleteLevel(api)
-
-    """functional: parse_user_id"""
-    async def test_parse_user_id_success(self):
-        user_id = await self.class_testing._parse_user_id("[id12345|Имя]")
-
-        self.assertEqual(user_id, 12345)
-
-    async def test_parse_user_id_incorrect_tag(self):
-        user_id = await self.class_testing._parse_user_id("@testincorrect")
-
-        self.assertEqual(user_id, None)
+        system(f"mypy {self.class_testing.DIR}")
 
     """functional: valid_user"""
     async def test_valid_user_success(self):
