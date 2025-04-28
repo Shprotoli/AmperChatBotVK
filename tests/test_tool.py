@@ -91,8 +91,7 @@ class TApiVK(AApiVk):
 
     """get_info_chat"""
 
-    async def get_info_chat(self, peer_id: int) -> Union[
-        MessagesGetConversationByIdExtended, MessagesGetConversationById]:
+    async def get_info_chat(self, peer_id: int) -> Union[MessagesGetConversationByIdExtended, MessagesGetConversationById]:
         pass
 
     """get_info_user"""

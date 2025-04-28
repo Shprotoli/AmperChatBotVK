@@ -6,10 +6,11 @@ from vkbottle_types.responses.messages import MessagesGetConversationByIdExtende
 from vkbottle_types.objects import UsersUserFull
 from vkbottle.bot import Message
 
+
 class AHandlerCommand(ABC):
-    COMMAND = str # Команда для handler, например: `help`
-    PREFIX = Tuple[str] # Префикс для команды, например: `("/", ".")`
-    ARGS = int # Количество аргументов, например: `2`
+    COMMAND = str  # Команда для handler, например: `help`
+    PREFIX = Tuple[str]  # Префикс для команды, например: `("/", ".")`
+    ARGS = int  # Количество аргументов, например: `2`
     SEP = str
 
     MESSAGES_DICT = dict
@@ -21,7 +22,7 @@ class AHandlerCommand(ABC):
 
         :param bot: экземпляр класса, через который можно взаимодействовать с VK API
         """
-        #self.bot = bot
+        # self.bot = bot
         pass
 
     @abstractmethod
@@ -45,6 +46,7 @@ class AHandlerCommand(ABC):
         :return: None
         """
         pass
+
 
 class ACallbackHandler(ABC):
     @abstractmethod
@@ -70,6 +72,7 @@ class ACallbackHandler(ABC):
         :return: None
         """
         pass
+
 
 class AApiVk(ABC):
     @abstractmethod
@@ -109,7 +112,8 @@ class AApiVk(ABC):
         pass
 
     @abstractmethod
-    async def edit_message_chat(self, peer_id: Union[str, int], conversation_message_id: Union[str, int], message: str, keyboard: tuple=None) -> None:
+    async def edit_message_chat(self, peer_id: Union[str, int], conversation_message_id: Union[str, int], message: str,
+                                keyboard: tuple = None) -> None:
         """
         Функция для редактирования сообщения в беседе
 
@@ -122,7 +126,8 @@ class AApiVk(ABC):
         pass
 
     @abstractmethod
-    async def send_notif(self, peer_id: Union[str, int], event_id: Union[str, int], user_id: Union[str, int], message: str) -> None:
+    async def send_notif(self, peer_id: Union[str, int], event_id: Union[str, int], user_id: Union[str, int],
+                         message: str) -> None:
         """
         Функция для отправки уведомления пользователю
 
@@ -135,13 +140,12 @@ class AApiVk(ABC):
         pass
 
     @abstractmethod
-    async def _send_message_by_list(self, peer_id: int, user_id: int, messages_dict: tuple, status: str, index: int,
-                                    id_request: int, admin_lvl_set: int, nick: str, new_nick: str, value_random: int,
-                                    ) -> None:
-        """
-        Функция для отправки сообщения с предоставлением списка сообщений
+    async def send_messages_by_list(self, peer_id: int, user_id: int, messages_dict: tuple, status: str, index: int,
+                                   id_request: int, admin_lvl_set: int, nick: str, new_nick: str, value_random: int,
+                                   ) -> None:
+        """Функция для отправки сообщения с предоставлением списка сообщений
 
-        - Например:
+        Например::
             ._send_message_by_list(
                 peer_id=1000000000,
                 user_id=1,
@@ -183,7 +187,8 @@ class AApiVk(ABC):
         pass
 
     @abstractmethod
-    async def get_info_chat(self, peer_id: int) -> Union[MessagesGetConversationByIdExtended, MessagesGetConversationById]:
+    async def get_info_chat(self, peer_id: int) -> Union[
+        MessagesGetConversationByIdExtended, MessagesGetConversationById]:
         """
         Функция для получения информации о беседе
 

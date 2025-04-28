@@ -8,6 +8,7 @@ from AmperChatBot.handlers.ENUM.message import EDeleteLvlMessage
 
 class CDeleteLevel(AHandlerCommand):
     """Класс для обработки команды `/dellvl`"""
+    DIR = "../../handlers/command/free_lvl/lvl/dellvl_handler.py"
     COMMAND = "dellvl"
     PREFIX = PREFIX_DEFAULT
     ARGS = 1
