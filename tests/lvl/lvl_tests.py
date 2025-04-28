@@ -4,13 +4,18 @@ import unittest
 
 from AmperChatBot.handlers.command.free_lvl.lvl.dellvl_handler import CDeleteLevel
 from AmperChatBot.tests.test_tool import TApiVK
+from AmperChatBot.tests.config_test import CONFIG_FILE_POETRY
 
-api = TApiVK()
+API = TApiVK()
 
 class TDeleteLevel(unittest.IsolatedAsyncioTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        system(f"mypy {CONFIG_FILE_POETRY}{CDeleteLevel.DIR}")
+
     async def asyncSetUp(self):
-        self.class_testing = CDeleteLevel(api)
-        system(f"mypy {self.class_testing.DIR}")
+        self.class_testing = CDeleteLevel(API)
 
     """functional: valid_user"""
     async def test_valid_user_success(self):
