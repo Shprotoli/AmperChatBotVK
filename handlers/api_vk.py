@@ -8,6 +8,7 @@ from vkbottle import Bot
 from AmperChatBot.handlers.ABC.ABCAmper import AApiVk
 from AmperChatBot.handlers.ERROR.ApiVKRaise import NotArgumentAccess, ManyArgumentAccess
 
+
 class CPunishmentApiVK:
     def __init__(self, bot: "Bot"):
         self.bot = bot
@@ -36,10 +37,12 @@ class CPunishmentApiVK:
             }
         )
 
-
     async def kick(self, chat_id, user_id) -> None: await self._kick(chat_id, user_id)
+
     async def mute(self, peer_id, user_id, min) -> None: await self._mute(peer_id, user_id, min)
+
     async def unmute(self, peer_id, user_id) -> None: await self._unmute(peer_id, user_id)
+
 
 class CApiVK(AApiVk):
     def __init__(self, bot: Bot):
@@ -74,10 +77,10 @@ class CApiVK(AApiVk):
 
     async def _edit_message_chat(self, peer_id, conversation_message_id, message, keyboard):
         await self.bot.api.messages.edit(
-           peer_id=peer_id,
-           conversation_message_id=conversation_message_id,
-           message=message,
-           keyboard=keyboard,
+            peer_id=peer_id,
+            conversation_message_id=conversation_message_id,
+            message=message,
+            keyboard=keyboard,
         )
 
     async def _send_notif(self, peer_id, event_id, user_id, message):
@@ -88,7 +91,8 @@ class CApiVK(AApiVk):
             event_data=dumps({"type": "show_snackbar", "text": message}),
         )
 
-    async def _send_message_by_list(self, peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set, nick, new_nick, value_random):
+    async def _send_message_by_list(self, peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set,
+                                    nick, new_nick, value_random):
         if not any([status, index]):
             raise NotArgumentAccess("Not passed argument access in functional")
 
@@ -112,7 +116,6 @@ class CApiVK(AApiVk):
             new_nick=new_nick,
             value_random=value_random,
         ))
-
 
     async def _send_message(self, peer_id, message_text):
         await self.bot.api.messages.send(
@@ -141,17 +144,30 @@ class CApiVK(AApiVk):
         return online_user_ids
 
     @property
-    def punishment(self) -> "CPunishmentApiVK": return self._punishment
+    def punishment(self) -> "CPunishmentApiVK":
+        return self._punishment
 
+    async def get_creater_chat(self, peer_id):
+        return await self._get_creater_chat(peer_id)
 
-    async def get_creater_chat(self, peer_id): return await self._get_creater_chat(peer_id)
-    async def get_users_online(self, peer_id): return await self._get_users_online(peer_id)
-    async def is_creater_chat(self, id_user, peer_id): return id_user == await self._get_creater_chat(peer_id)
-    async def bot_is_admin_in_chat(self, peer_id): return await self._bot_is_admin_in_chat(peer_id)
+    async def get_users_online(self, peer_id):
+        return await self._get_users_online(peer_id)
+
+    async def is_creater_chat(self, id_user, peer_id):
+        return id_user == await self._get_creater_chat(peer_id)
+
+    async def bot_is_admin_in_chat(self, peer_id):
+        return await self._bot_is_admin_in_chat(peer_id)
+
     async def edit_message_chat(self, peer_id, conversation_message_id, message, keyboard=None):
         await self._edit_message_chat(peer_id, conversation_message_id, message, keyboard)
-    async def send_notif(self, peer_id, event_id, user_id, message): await self._send_notif(peer_id, event_id, user_id, message)
-    async def send_message(self, peer_id, message_text): await self._send_message(peer_id, message_text)
+
+    async def send_notif(self, peer_id, event_id, user_id, message):
+        await self._send_notif(peer_id, event_id, user_id, message)
+
+    async def send_message(self, peer_id, message_text):
+        await self._send_message(peer_id, message_text)
+
     async def send_messages_by_list(self, peer_id, user_id, messages_list, status=None, index=None,
                                     id_request=None,
                                     admin_lvl_set=None,
@@ -162,6 +178,12 @@ class CApiVK(AApiVk):
         await self._send_message_by_list(peer_id, user_id, messages_list, status, index, id_request, admin_lvl_set,
                                          nick, new_nick, value_random,
                                          )
-    async def get_info_chat(self, peer_id): return await self._get_info_chat(peer_id)
-    async def get_info_user(self, user_id): return await self._get_info_user(user_id)
-    async def parse_user_id(self, user_info): return await self._parse_user_id(user_info)
+
+    async def get_info_chat(self, peer_id):
+        return await self._get_info_chat(peer_id)
+
+    async def get_info_user(self, user_id):
+        return await self._get_info_user(user_id)
+
+    async def parse_user_id(self, user_info):
+        return await self._parse_user_id(user_info)

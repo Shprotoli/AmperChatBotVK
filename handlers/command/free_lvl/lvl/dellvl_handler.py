@@ -8,6 +8,7 @@ from AmperChatBot.handlers.ENUM.message import EDeleteLvlMessage
 
 class CDeleteLevel(AHandlerCommand):
     """Класс для обработки команды `/dellvl`"""
+    DIR = "../../handlers/command/free_lvl/lvl/dellvl_handler.py"
     COMMAND = "dellvl"
     PREFIX = PREFIX_DEFAULT
     ARGS = 1
@@ -50,7 +51,7 @@ class CDeleteLevel(AHandlerCommand):
             return False
         return True
 
-    async def _is_valid_user(self, user_string: str, peer_id: int, id_request_user: int) -> bool:
+    async def _is_valid_user(self, user_string: str, peer_id: int, id_request_user: int) -> int:
         user_id = await self.api.parse_user_id(user_string)
 
         if not user_id:
