@@ -83,4 +83,5 @@ class CDeleteLevel(AHandlerCommand):
             await self.api.send_messages_by_list(peer_id, user_id, self.MESSAGES_DICT, status="less_rights")
 
     @checked_root_user(started_chat=True, lvl_admin_root=3)
-    async def realization_command(self, message, args=None) -> None: await self._realization_command(message, args)
+    async def realization_command(self, message, args=None) -> None:
+        await self._realization_command(message, args)

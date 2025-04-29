@@ -7,6 +7,7 @@ from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 
 class CNickList(AHandlerCommand):
     """Класс для обработки команды `/nlist`"""
+    DIR = "../../handlers/command/one_lvl/nick_users/nlist_handler.py"
     COMMAND = "nlist"
     PREFIX = PREFIX_DEFAULT
     ARGS = 0

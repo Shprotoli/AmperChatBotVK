@@ -8,6 +8,7 @@ from AmperChatBot.handlers.ENUM.message import EGetNick
 
 class CGetNick(AHandlerCommand):
     """Класс для обработки команды `/getnick`"""
+    DIR = "../../handlers/command/one_lvl/nick_users/getnick_handler.py"
     COMMAND = "getnick"
     PREFIX = PREFIX_DEFAULT
     ARGS = 1

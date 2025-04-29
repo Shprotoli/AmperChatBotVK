@@ -8,10 +8,11 @@ from vkbottle.bot import Message
 
 
 class AHandlerCommand(ABC):
-    COMMAND = str  # Команда для handler, например: `help`
-    PREFIX = Tuple[str]  # Префикс для команды, например: `("/", ".")`
-    ARGS = int  # Количество аргументов, например: `2`
-    SEP = str
+    DIR: str  # Путь к текущему файлу
+    COMMAND: str  # Команда для handler, например: `help`
+    PREFIX: Tuple[str]  # Префикс для команды, например: `("/", ".")`
+    ARGS: int  # Количество аргументов, например: `2`
+    SEP: str
 
     MESSAGES_DICT = dict
 
@@ -141,8 +142,8 @@ class AApiVk(ABC):
 
     @abstractmethod
     async def send_messages_by_list(self, peer_id: int, user_id: int, messages_dict: tuple, status: str, index: int,
-                                   id_request: int, admin_lvl_set: int, nick: str, new_nick: str, value_random: int,
-                                   ) -> None:
+                                    id_request: int, admin_lvl_set: int, nick: str, new_nick: str, value_random: int,
+                                    ) -> None:
         """Функция для отправки сообщения с предоставлением списка сообщений
 
         Например::

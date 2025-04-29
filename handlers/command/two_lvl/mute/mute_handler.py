@@ -7,6 +7,7 @@ from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 
 class CMute(AHandlerCommand):
     """Класс для обработки команды `/mute`"""
+    DIR = "../../handlers/command/two_lvl/mute/mute_handler.py"
     COMMAND = "mute"
     PREFIX = PREFIX_DEFAULT
     ARGS = 2

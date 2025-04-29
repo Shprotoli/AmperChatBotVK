@@ -8,6 +8,7 @@ from AmperChatBot.handlers.ENUM.message import ERemoveNick
 
 class CRemoveNick(AHandlerCommand):
     """Класс для обработки команды `/rnick`"""
+    DIR = "../../handlers/command/one_lvl/nick_users/rnick_handler.py"
     COMMAND = "rnick"
     PREFIX = PREFIX_DEFAULT
     ARGS = 1

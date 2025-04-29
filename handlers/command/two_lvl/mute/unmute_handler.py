@@ -8,6 +8,7 @@ from AmperChatBot.handlers.ENUM.message import EUnMute
 
 class CUnMute(AHandlerCommand):
     """Класс для обработки команды `/unmute`"""
+    DIR = "../../handlers/command/two_lvl/mute/unmute_handler.py"
     COMMAND = "unmute"
     PREFIX = PREFIX_DEFAULT
     ARGS = 1

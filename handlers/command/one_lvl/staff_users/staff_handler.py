@@ -7,6 +7,7 @@ from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 
 class CStaffList(AHandlerCommand):
     """Класс для обработки команды `/staff`"""
+    DIR = "../../handlers/command/one_lvl/staff_users/staff_handler.py"
     COMMAND = "staff"
     PREFIX = PREFIX_DEFAULT
     ARGS = 0

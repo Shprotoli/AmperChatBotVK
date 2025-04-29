@@ -8,6 +8,7 @@ from AmperChatBot.handlers.ENUM.message import ESetLvlessage
 
 class CSetLvl(AHandlerCommand):
     """Класс для обработки команды `/setlvl`"""
+    DIR = "../../handlers/command/free_lvl/lvl/setlvl_handler.py"
     COMMAND = "setlvl"
     PREFIX = PREFIX_DEFAULT
     ARGS = 2

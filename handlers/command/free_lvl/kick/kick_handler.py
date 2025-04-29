@@ -10,6 +10,7 @@ from AmperChatBot.handlers.ENUM.message import EKickMessage
 
 class CKick(AHandlerCommand):
     """Класс для обработки команды `/kick`"""
+    DIR = "../../handlers/command/free_lvl/kick/kick_handler.py"
     COMMAND = "kick"
     PREFIX = PREFIX_DEFAULT
     ARGS = 1

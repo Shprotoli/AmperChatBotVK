@@ -8,6 +8,7 @@ from AmperChatBot.handlers.ENUM.message import ESetNick
 
 class CSetNick(AHandlerCommand):
     """Класс для обработки команды `/setnick`"""
+    DIR = "../../handlers/command/one_lvl/nick_users/setnick_handler.py"
     COMMAND = "setnick"
     PREFIX = PREFIX_DEFAULT
     ARGS = 2

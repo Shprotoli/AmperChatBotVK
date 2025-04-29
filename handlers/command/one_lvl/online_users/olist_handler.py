@@ -7,6 +7,7 @@ from AmperChatBot.handlers.DB.amper_mysql import DAmperMySQL
 
 class COnlineList(AHandlerCommand):
     """Класс для обработки команды `/olist`"""
+    DIR = "../../handlers/command/one_lvl/online_users/olist_handler.py"
     COMMAND = "olist"
     PREFIX = PREFIX_DEFAULT
     ARGS = 0
